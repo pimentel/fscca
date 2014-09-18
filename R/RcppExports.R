@@ -14,9 +14,6 @@ nipals <- function(Xr, Yr) {
     .Call('sccaf_nipals', PACKAGE = 'sccaf', Xr, Yr)
 }
 
-#' @useDynLib sccaf
-NULL
-
 #' Hello world
 #'
 #' @return a list with foo bar

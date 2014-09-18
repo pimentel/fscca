@@ -21,13 +21,14 @@ Rcpp::List nipals(Rcpp::NumericMatrix Xr, Rcpp::NumericMatrix Yr)
 
     arma::vec v1(Y.begin(), Yr.nrow(), true);
 
-    arma::vec a1();
+    // arma::vec a1(X.n_cols);
+    arma::vec a1(X.n_cols);
     arma::vec b1;
 
     arma::vec u1;
     arma::vec v1_old;
 
-    while (eps > MIN_EPS)
+    while (eps > EPS_CONVERGE)
     {
         a1 = arma::trans(X) * v1;
         a1 = a1 / arma::sum( v1 % v1 );

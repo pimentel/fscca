@@ -1,8 +1,5 @@
 #include <Rcpp.h>
 
-//' @useDynLib sccaf
-
-
 //' Hello world
 //'
 //' @return a list with foo bar
