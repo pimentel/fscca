@@ -9,4 +9,4 @@ Description: Implementation of NIPALS SCCA using Rcpp.
 License: MIT
 Imports:
     Rcpp (>= 0.11.2)
-LinkingTo: Rcpp
+LinkingTo: Rcpp, RcppArmadillo

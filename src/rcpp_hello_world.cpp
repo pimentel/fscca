@@ -1,6 +1,5 @@
 #include <Rcpp.h>
 
-
 //' @useDynLib sccaf
 
 

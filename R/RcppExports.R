@@ -4,6 +4,19 @@
 #' @useDynLib sccaf
 NULL
 
+#' NIPALS CCA algorithm
+#'
+#' @param x a matrix x that has been centered and scaled
+#' @param y a matrix y that has been centered and scaled
+#' @return a list containing a1 and b1
+#' @export
+nipals <- function(Xr, Yr) {
+    .Call('sccaf_nipals', PACKAGE = 'sccaf', Xr, Yr)
+}
+
+#' @useDynLib sccaf
+NULL
+
 #' Hello world
 #'
 #' @return a list with foo bar
