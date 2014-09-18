@@ -12,3 +12,12 @@ rcpp_hello_world <- function() {
     .Call('sccaf_rcpp_hello_world', PACKAGE = 'sccaf')
 }
 
+#' First column
+#'
+#' @param x a matrix
+#' @return the first column of the matrix
+#' @export
+firstColumn <- function(nm, c) {
+    .Call('sccaf_firstColumn', PACKAGE = 'sccaf', nm, c)
+}
+
