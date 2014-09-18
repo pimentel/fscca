@@ -2,9 +2,14 @@
 #include <Rcpp.h>
 using namespace Rcpp;
 
+
+//' @useDynLib sccaf
+
+
 //' Hello world
 //'
 //' @return a list with foo bar
+//' @export
 // [[Rcpp::export]]
 List rcpp_hello_world() {
 
