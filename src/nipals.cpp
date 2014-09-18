@@ -19,14 +19,13 @@ Rcpp::List nipals(Rcpp::NumericMatrix Xr, Rcpp::NumericMatrix Yr)
     arma::mat X = Rcpp::as<arma::mat>(Xr);
     arma::mat Y = Rcpp::as<arma::mat>(Yr);
 
-    arma::vec v1(Y.begin(), Yr.nrow(), true);
+    arma::vec v1(Y.begin(), Y.n_rows, true);
 
-    // arma::vec a1(X.n_cols);
     arma::vec a1(X.n_cols);
-    arma::vec b1;
+    arma::vec b1(Y.n_cols);
 
-    arma::vec u1;
-    arma::vec v1_old;
+    arma::vec u1(X.n_rows);
+    arma::vec v1_old(Y.n_rows);
 
     while (eps > EPS_CONVERGE)
     {

@@ -7,8 +7,8 @@ set.seed(42)
 n <- 1000
 p <- 50
 q <- 20
-X <- matrix(rnorm(n*p),ncol=p)
-Y <- matrix(rnorm(n*q),ncol=q)
+X <- matrix(rnorm(n*p), ncol=p)
+Y <- matrix(rnorm(n*q), ncol=q)
 
 X <- scale(X, scale = T, center = F)
 Y <- scale(Y, scale = T, center = F)
@@ -18,6 +18,8 @@ cpp_res <- sccaf::nipals(X, Y)
 cpp_res$a1 <- round(cpp_res$a1, 4)
 cpp_res$b1 <- round(cpp_res$b1, 4)
 
+all.equal(r_res, cpp_res)
+
 bench <- microbenchmark(
     R_time = scca::NIPALS(X, Y),
     Cpp_time = sccaf::nipals(X, Y),
@@ -26,6 +28,21 @@ bench <- microbenchmark(
     )
 
 print(bench)
+
+n <- 20
+X <- matrix(rnorm(n*p), ncol=p)
+Y <- matrix(rnorm(n*q), ncol=q)
+
+bench <- microbenchmark(
+    R_time = scca::NIPALS(X, Y),
+    Cpp_time = sccaf::nipals(X, Y),
+    times = 1000
+    )
+
+print(bench)
+
+ggplot(bench, aes(expr, time, fill = expr)) + geom_boxplot() +
+    scale_y_log10()
 
 # Unit: milliseconds
 #      expr       min        lq    median        uq       max neval
