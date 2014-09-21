@@ -1,6 +1,6 @@
-Package: sccaf
+Package: fscca
 Type: Package
-Title: SCCA.. Fast
+Title: Fast SCCA
 Version: 0.1.0
 Date: 2014-09-17
 Author: Harold Pimentel
