@@ -8,6 +8,8 @@ Maintainer: Harold Pimentel <haroldpimentel@gmail.com>
 Description: Implementation of NIPALS SCCA using Rcpp.
 License: MIT
 Imports:
-    Rcpp (>= 0.11.2)
+    Rcpp (>= 0.11.2),
     RcppArmadillo (>= 0.4.400.0)
 LinkingTo: Rcpp, RcppArmadillo
+Suggests:
+    testthat

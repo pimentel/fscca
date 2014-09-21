@@ -2,7 +2,7 @@
 
 #include <RcppArmadillo.h>
 
-//' @useDynLib sccaf
+//' @useDynLib fscca
 
 
 //' NIPALS CCA algorithm
@@ -15,6 +15,8 @@
 Rcpp::List nipals(Rcpp::NumericMatrix Xr, Rcpp::NumericMatrix Yr) 
 {
     double eps = 1.0;
+
+    // TODO: Add check that dimensions of X and Y are compatible
 
     arma::mat X = Rcpp::as<arma::mat>(Xr);
     arma::mat Y = Rcpp::as<arma::mat>(Yr);

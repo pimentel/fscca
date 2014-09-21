@@ -3,4 +3,4 @@
 export(firstColumn)
 export(nipals)
 export(rcpp_hello_world)
-useDynLib(sccaf)
+useDynLib(fscca)

@@ -8,7 +8,7 @@ using namespace Rcpp;
 
 // nipals
 Rcpp::List nipals(Rcpp::NumericMatrix Xr, Rcpp::NumericMatrix Yr);
-RcppExport SEXP sccaf_nipals(SEXP XrSEXP, SEXP YrSEXP) {
+RcppExport SEXP fscca_nipals(SEXP XrSEXP, SEXP YrSEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
     {
@@ -24,7 +24,7 @@ END_RCPP
 }
 // rcpp_hello_world
 Rcpp::List rcpp_hello_world();
-RcppExport SEXP sccaf_rcpp_hello_world() {
+RcppExport SEXP fscca_rcpp_hello_world() {
 BEGIN_RCPP
     SEXP __sexp_result;
     {
@@ -38,7 +38,7 @@ END_RCPP
 }
 // firstColumn
 Rcpp::NumericVector firstColumn(Rcpp::NumericMatrix nm, int c);
-RcppExport SEXP sccaf_firstColumn(SEXP nmSEXP, SEXP cSEXP) {
+RcppExport SEXP fscca_firstColumn(SEXP nmSEXP, SEXP cSEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
     {
