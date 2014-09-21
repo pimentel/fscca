@@ -63,3 +63,6 @@ computeCov(cc_res$xcoef[,1], cc_res$ycoef[,1], X, Y)
 computeCov(cpp_res$a1, cpp_res$b1, X, Y)
 computeCov(r_res$a1, r_res$b1, X, Y)
 
+################################################################################
+
+hi <- sparse_nipals(X, Y, 2, 3)

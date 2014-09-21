@@ -14,9 +14,15 @@
 // [[Rcpp::export]]
 Rcpp::List nipals(Rcpp::NumericMatrix Xr, Rcpp::NumericMatrix Yr) 
 {
-    double eps = 1.0;
 
-    // TODO: Add check that dimensions of X and Y are compatible
+    if (Xr.nrow() != Yr.nrow())
+    {
+        forward_exception_to_r(
+                std::runtime_error("nrows of X and Y must be equal!")
+                );
+    }
+
+    double eps = 1.0;
 
     arma::mat X = Rcpp::as<arma::mat>(Xr);
     arma::mat Y = Rcpp::as<arma::mat>(Yr);
@@ -57,4 +63,26 @@ Rcpp::List nipals(Rcpp::NumericMatrix Xr, Rcpp::NumericMatrix Yr)
             );
 
     return result;
+}
+
+
+//' Sparse NIPALS CCA algorithm
+//'
+//' @param x a matrix x that has been centered and scaled
+//' @param y a matrix y that has been centered and scaled
+//' @param lamx a positive penalty on 'a'
+//' @param lamy a positive penalty on 'b'
+//' @return a list containing a1 and b1
+//' @export
+// [[Rcpp::export]]
+Rcpp::List sparse_nipals(Rcpp::NumericMatrix Xr, Rcpp::NumericMatrix Yr,
+        double lamx, double lamy)
+{
+    double eps = 1;
+    int p = Xr.ncol();
+    int q = Yr.ncol();
+
+    Rcpp::List init_res = nipals(Xr, Yr);
+
+    return init_res;
 }

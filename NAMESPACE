@@ -3,4 +3,5 @@
 export(firstColumn)
 export(nipals)
 export(rcpp_hello_world)
+export(sparse_nipals)
 useDynLib(fscca)

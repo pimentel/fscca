@@ -22,6 +22,24 @@ BEGIN_RCPP
     return __sexp_result;
 END_RCPP
 }
+// sparse_nipals
+Rcpp::List sparse_nipals(Rcpp::NumericMatrix Xr, Rcpp::NumericMatrix Yr, double lamx, double lamy);
+RcppExport SEXP fscca_sparse_nipals(SEXP XrSEXP, SEXP YrSEXP, SEXP lamxSEXP, SEXP lamySEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type Xr(XrSEXP );
+        Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type Yr(YrSEXP );
+        Rcpp::traits::input_parameter< double >::type lamx(lamxSEXP );
+        Rcpp::traits::input_parameter< double >::type lamy(lamySEXP );
+        Rcpp::List __result = sparse_nipals(Xr, Yr, lamx, lamy);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
 // rcpp_hello_world
 Rcpp::List rcpp_hello_world();
 RcppExport SEXP fscca_rcpp_hello_world() {

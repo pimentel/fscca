@@ -14,6 +14,18 @@ nipals <- function(Xr, Yr) {
     .Call('fscca_nipals', PACKAGE = 'fscca', Xr, Yr)
 }
 
+#' Sparse NIPALS CCA algorithm
+#'
+#' @param x a matrix x that has been centered and scaled
+#' @param y a matrix y that has been centered and scaled
+#' @param lamx a positive penalty on 'a'
+#' @param lamy a positive penalty on 'b'
+#' @return a list containing a1 and b1
+#' @export
+sparse_nipals <- function(Xr, Yr, lamx, lamy) {
+    .Call('fscca_sparse_nipals', PACKAGE = 'fscca', Xr, Yr, lamx, lamy)
+}
+
 #' Hello world
 #'
 #' @return a list with foo bar
