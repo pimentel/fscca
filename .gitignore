@@ -1,0 +1,9 @@
+# R
+.Rapp.history
+
+# Rcpp
+*.so
+*.o
+
+# OSX
+.DS_Store
