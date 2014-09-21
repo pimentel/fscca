@@ -8,7 +8,6 @@ Y <- matrix(rnorm(n*q), ncol = q)
 
 test_that("input dimensions are ok",
     {
-        res <- nipals(X, Y)
         expect_that(nipals(X[1:10, ], Y[1:3,]), throws_error())
     })
 
