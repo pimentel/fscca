@@ -1,6 +1,6 @@
 #include <RcppArmadillo.h>
 
-#include "fwd.h"
+#include "fwd.hpp"
 #include "penalties.hpp"
 
 //' @useDynLib fscca
@@ -112,6 +112,8 @@ void iterate_sparse_nipals(arma::mat &Z, arma::vec &c)
     size_t n_iter = 0;
 
     arma::vec abs_c;
+
+    LassoPenalty np(3);
 
     while ( (eps > S_NIPALS_EPS_CONVERGE) &&
             (n_iter < 50) )
