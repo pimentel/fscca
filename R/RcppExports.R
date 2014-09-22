@@ -18,7 +18,7 @@ nipals <- function(Xr, Yr) {
 #'
 #' @param x a matrix x that has been centered and scaled
 #' @param y a matrix y that has been centered and scaled
-#' @param lamx a positive penalty on 'a'
+#' @param lamx a positive enalty on 'a'
 #' @param lamy a positive penalty on 'b'
 #' @return a list containing a1 and b1
 #' @export

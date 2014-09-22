@@ -1,6 +1,7 @@
-#include "fwd.h"
-
 #include <RcppArmadillo.h>
+
+#include "fwd.h"
+#include "penalties.hpp"
 
 //' @useDynLib fscca
 
@@ -35,7 +36,7 @@ Rcpp::List nipals(Rcpp::NumericMatrix Xr, Rcpp::NumericMatrix Yr)
     arma::vec u1(X.n_rows);
     arma::vec v1_old(Y.n_rows);
 
-    while (eps > EPS_CONVERGE)
+    while (eps > NIPALS_EPS_CONVERGE)
     {
         a1 = arma::trans(X) * v1;
         a1 = a1 / arma::sum( v1 % v1 );
@@ -70,7 +71,7 @@ Rcpp::List nipals(Rcpp::NumericMatrix Xr, Rcpp::NumericMatrix Yr)
 //'
 //' @param x a matrix x that has been centered and scaled
 //' @param y a matrix y that has been centered and scaled
-//' @param lamx a positive penalty on 'a'
+//' @param lamx a positive enalty on 'a'
 //' @param lamy a positive penalty on 'b'
 //' @return a list containing a1 and b1
 //' @export
@@ -78,11 +79,49 @@ Rcpp::List nipals(Rcpp::NumericMatrix Xr, Rcpp::NumericMatrix Yr)
 Rcpp::List sparse_nipals(Rcpp::NumericMatrix Xr, Rcpp::NumericMatrix Yr,
         double lamx, double lamy)
 {
-    double eps = 1;
-    int p = Xr.ncol();
-    int q = Yr.ncol();
+    if (lamx < 0.0 || lamy < 0.0)
+    {
+        forward_exception_to_r(
+                std::runtime_error("lamx and lamy must be at least 0.0")
+                );
+    }
 
+    // nipals will check the dimensions of X and Y
     Rcpp::List init_res = nipals(Xr, Yr);
+
+    size_t p = Xr.ncol();
+    size_t q = Yr.ncol();
+    size_t n_iter = 0;
+
+    double eps = 1;
+
+    while ( (eps > S_NIPALS_EPS_CONVERGE) &&
+            (n_iter < 100) )
+    {
+        // TODO: write me
+        ++n_iter;
+        n_iter = 1000;
+    }
 
     return init_res;
 }
+
+void iterate_sparse_nipals(arma::mat &Z, arma::vec &c)
+{
+    double eps = 1;
+    size_t n_iter = 0;
+
+    arma::vec abs_c;
+
+    while ( (eps > S_NIPALS_EPS_CONVERGE) &&
+            (n_iter < 50) )
+    {
+        // for now only compute LASSO
+        // TODO: make this a call a functor for penalty derivative
+
+        break;
+    }
+
+}
+
+

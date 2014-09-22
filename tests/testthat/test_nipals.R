@@ -17,3 +17,12 @@ test_that("out dimensions are correct",
         expect_equal(nrow(res$a1), p)
         expect_equal(nrow(res$b1), q)
     })
+
+
+context("Sparse NIPALS")
+test_that("lambdas are >= 0",
+    {
+        expect_that(sparse_nipals(X, Y, -2.0, 0.0), throws_error())
+        expect_that(sparse_nipals(X, Y, 0.0, -0.1), throws_error())
+        expect_that(sparse_nipals(X, Y, -10.0, -0.1), throws_error())
+    })

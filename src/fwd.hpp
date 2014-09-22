@@ -1,7 +1,8 @@
 #ifndef FSCCA_FWD_H
 #define FSCCA_FWD_H
 
-#define EPS_CONVERGE 1e-6
+#define NIPALS_EPS_CONVERGE 1e-6
+#define S_NIPALS_EPS_CONVERGE 1e-3
 
 double square(double x)
 {
