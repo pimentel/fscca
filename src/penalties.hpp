@@ -1,17 +1,20 @@
 #ifndef PENALTIES_HPP
 #define PENALTIES_HPP
 
+#include <RcppArmadillo.h>
+
+// TODO: Expose C++ classes to R and unit test
+
 class NipalsPenalty {
     public:
-        // Given a vector, returns the derivative of the penalty on that
-        // function
-        virtual double dpenalty(arma::vec &) const = 0;
+        // Given a vector, returns the W(x) function 
+        virtual arma::vec w(arma::vec &) const = 0;
 };
 
 class LassoPenalty : NipalsPenalty {
     public:
         LassoPenalty(double );
-        virtual double dpenalty(arma::vec&) const;
+        virtual arma::vec w(arma::vec&) const;
     protected:
         double lambda;
 };
@@ -20,11 +23,13 @@ LassoPenalty::LassoPenalty(double lam) :
     lambda(lam)
 {}
 
-double LassoPenalty::dpenalty(arma::vec& x) const
+arma::vec LassoPenalty::w(arma::vec& x) const
 {
-    // TODO: compute penalty
+    arma::vec res;
+    res = abs(x) + 1.0e-8;
 
-    return 42.0;
+
+    return res;
 }
 
 #endif // PENALTIES_HPP
