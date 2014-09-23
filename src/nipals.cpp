@@ -51,7 +51,7 @@ Rcpp::List nipals(Rcpp::NumericMatrix Xr, Rcpp::NumericMatrix Yr)
         v1_old = v1;
 
         v1 = Y * b1;
-        eps = max(abs(v1 - v1_old));
+        eps = arma::max(abs(v1 - v1_old));
     }
 
     arma::vec rho1 = arma::trans(u1) * v1;
@@ -137,7 +137,7 @@ Rcpp::List sparse_nipals(Rcpp::NumericMatrix Xr, Rcpp::NumericMatrix Yr,
         v_prev = v;
         v = Y * b;
 
-        eps = max(abs( v - v_prev ));
+        eps = arma::max(abs( v - v_prev ));
 
         a_zeros = count_zeros( a );
         b_zeros = count_zeros( b );
@@ -208,11 +208,9 @@ void iterate_sparse_nipals(const arma::mat &Z, arma::vec &coef,
         }
 
         // TODO: is max the correct thing to do here?
-        eps = max( abs(coef - coef_prev) );
+        eps = arma::max( abs(coef - coef_prev) );
     }
 
     coef = coef / l2_norm( coef );
     // u = Z * coef;
 }
-
-

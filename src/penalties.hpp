@@ -27,7 +27,7 @@ LassoPenalty::LassoPenalty(double lam) :
 
 void LassoPenalty::w(const arma::vec &x, arma::vec &result) const
 {
-    result = abs(x) + 1.0e-8;
+    result = 1 / (arma::abs(x) + 1.0e-8);
 }
 
 double LassoPenalty::lambda() const

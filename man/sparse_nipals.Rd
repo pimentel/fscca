@@ -6,7 +6,7 @@
 sparse_nipals(Xr, Yr, lamx, lamy)
 }
 \arguments{
-\item{lamx}{a positive penalty on 'a'}
+\item{lamx}{a positive enalty on 'a'}
 
 \item{lamy}{a positive penalty on 'b'}
 

@@ -4,6 +4,7 @@ library(fscca)
 
 set.seed(42)
 
+n <- 10
 n <- 1000
 p <- 50
 q <- 20
@@ -69,10 +70,41 @@ hi <- sparse_nipals(X[1:10,], Y[1:10,], 2, 3)
 bye <- NIPALS.sparse(X[1:10, ], Y[1:10,], 2, 3, "LASSO")
 
 bench_sparse <- microbenchmark(
-    R_time = scca::NIPALS.sparse(X, Y, 2, 3, "LASSO"),
-    Cpp_time = fscca::sparse_nipals(X, Y, 2, 3),
+    R_time = scca::NIPALS.sparse(X[1:10,], Y[1:10,], 2, 3, "LASSO"),
+    Cpp_time = fscca::sparse_nipals(X[1:10,], Y[1:10,], 2, 3),
     times = 1000
     )
 
 sum(abs(hi$a))
 sum(abs(bye$a))
+
+sum(abs(hi$b))
+sum(abs(bye$b))
+
+s_res <- scca(X,Y, "LASSO")
+all.equal(s_res$U[,1], as.numeric(X %*% s_res$A[,1]))
+s_res_1 <- NIPALS.sparse(X, Y, 1, 3, "LASSO")
+s_res_3 <- NIPALS.sparse(X, Y, 1, 3, "LASSO")
+s_res_05 <- NIPALS.sparse(X, Y, 0.000005, 0.005, "LASSO")
+c(sum(abs(s_res_1$a1)), sum(abs(s_res_1$b1)))
+c(sum(abs(s_res_3$a1)), sum(abs(s_res_3$b1)))
+c(sum(abs(s_res_05$a1)), sum(abs(s_res_05$b1)))
+
+c_res_1 <- sparse_nipals(X, Y, 1, 3)
+c_res_3 <- sparse_nipals(X, Y, 3, 3)
+c_res_10 <- sparse_nipals(X, Y, 10, 3)
+c_res_40 <- sparse_nipals(X, Y, 10, 40)
+c_res_05 <- sparse_nipals(X, Y, 0.5, 0.5)
+c_res_05 <- sparse_nipals(X, Y, 0.000005, 0.005)
+
+c(sum(abs(c_res_1$a)), sum(abs(c_res_1$b)))
+c(sum(abs(c_res_3$a)), sum(abs(c_res_3$b)))
+c(sum(abs(c_res_10$a)), sum(abs(c_res_10$b)))
+c(sum(abs(c_res_40$a)), sum(abs(c_res_40$b)))
+c(sum(abs(c_res_05$a)), sum(abs(c_res_05$b)))
+
+p_res_05 <- PMA::CCA(X, Y, penaltyx = 0.5, penaltyz = 0.5)
+p_res_005 <- PMA::CCA(X, Y, penaltyx = 0.05, penaltyz = 0.05)
+p_res_01 <- PMA::CCA(X, Y, penaltyx = 0.01, penaltyz = 0.01)
+p_res_04 <- PMA::CCA(X, Y, penaltyx = 0.04, penaltyz = 0.04)
+sqrt(sum(c_res$a^2))
