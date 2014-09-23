@@ -39,14 +39,14 @@ Rcpp::List nipals(Rcpp::NumericMatrix Xr, Rcpp::NumericMatrix Yr)
     while (eps > NIPALS_EPS_CONVERGE)
     {
         a1 = arma::trans(X) * v1;
-        a1 = a1 / arma::sum( v1 % v1 );
-        a1 = a1 / sqrt( arma::sum( a1 % a1 ) );
+        a1 = a1 / l2_norm_sq( v1 );
+        a1 = a1 / l2_norm( a1 ) ;
 
         u1 = X * a1;
 
         b1 = arma::trans(Y) * u1;
-        b1 = b1 / arma::sum( u1 % u1 );
-        b1 = b1 / sqrt( arma::sum( b1 % b1 ) );
+        b1 = b1 / l2_norm_sq( u1 );
+        b1 = b1 / l2_norm( b1 );
 
         v1_old = v1;
 
@@ -66,6 +66,21 @@ Rcpp::List nipals(Rcpp::NumericMatrix Xr, Rcpp::NumericMatrix Yr)
     return result;
 }
 
+void iterate_sparse_nipals(const arma::mat &Z, arma::vec &coef,
+        arma::vec &u, const arma::vec &v, const NipalsPenalty& np);
+
+size_t count_zeros(const arma::vec &x)
+{
+    size_t count = 0;
+
+    for (arma::vec::const_iterator it = x.begin(); it != x.end(); ++it )
+    {
+        if (*it < ROUND_ZERO)
+            ++count;
+    }
+
+    return count;
+}
 
 //' Sparse NIPALS CCA algorithm
 //'
@@ -95,35 +110,113 @@ Rcpp::List sparse_nipals(Rcpp::NumericMatrix Xr, Rcpp::NumericMatrix Yr,
 
     double eps = 1;
 
+    arma::mat X = Rcpp::as<arma::mat>(Xr);
+    arma::mat Y = Rcpp::as<arma::mat>(Yr);
+
+    arma::vec u(X.n_rows);
+    arma::vec v(Y.begin(), Y.n_rows, true);
+    arma::vec v_prev;
+
+    arma::vec a = Rcpp::as<arma::vec>(init_res["a1"]);
+    arma::vec b = Rcpp::as<arma::vec>(init_res["b1"]);
+
+    LassoPenalty penalty_x(lamx);
+    LassoPenalty penalty_y(lamy);
+
+    size_t a_zeros;
+    size_t b_zeros;
+
     while ( (eps > S_NIPALS_EPS_CONVERGE) &&
             (n_iter < 100) )
     {
         // TODO: write me
+        iterate_sparse_nipals(X, a, u, v, penalty_x);
+        u = X * a;
+
+        iterate_sparse_nipals(Y, b, v, u, penalty_y);
+        v_prev = v;
+        v = Y * b;
+
+        eps = max(abs( v - v_prev ));
+
+        a_zeros = count_zeros( a );
+        b_zeros = count_zeros( b );
+
+        if (a_zeros >= (p - 1) && b_zeros >= (q - 2))
+            break;
+
         ++n_iter;
-        n_iter = 1000;
     }
 
-    return init_res;
+    if ( n_iter == 100 )
+    {
+        Rcpp::Rcout << "No convergence" << std::endl;
+    }
+
+    a = a / l2_norm( a );
+    b = b / l2_norm( b );
+
+    Rcpp::Rcout << "a\t" << a.n_elem << std::endl;
+    Rcpp::Rcout << "b\t" << b.n_elem << std::endl;
+    u = X * a;
+    Rcpp::Rcout << "sup" << std::endl;
+    v = Y * b;
+    Rcpp::Rcout << "nah" << std::endl;
+    arma::vec rho = arma::trans(u) * v;
+
+    Rcpp::List result = Rcpp::List::create(Rcpp::Named("rho") = rho,
+            Rcpp::Named("u") = u,
+            Rcpp::Named("v") = v,
+            Rcpp::Named("a") = a,
+            Rcpp::Named("b") = b,
+            Rcpp::Named("niter") = n_iter
+            );
+
+    return result;
 }
 
-void iterate_sparse_nipals(arma::mat &Z, arma::vec &c)
+void iterate_sparse_nipals(const arma::mat &Z, arma::vec &coef,
+        arma::vec &u, const arma::vec &v, const NipalsPenalty& np)
 {
+    // Z: The data matrix
+    // coef: 'a' in Xa
+    // u: 'u' in u = Xa
+    // v: 'v' in t(X) %*% v
     double eps = 1;
     size_t n_iter = 0;
 
-    arma::vec abs_c;
+    arma::vec w(coef.n_elem);
 
-    LassoPenalty np(3);
+    arma::vec coef_prev(coef.n_elem);
+    arma::vec Ztv(v.n_elem);
+
+    double v_norm = 0;
 
     while ( (eps > S_NIPALS_EPS_CONVERGE) &&
             (n_iter < 50) )
     {
         // for now only compute LASSO
         // TODO: make this a call a functor for penalty derivative
+        np.w( coef, w );
 
-        break;
+        Ztv = arma::trans(Z) * v;
+
+        v_norm = l2_norm_sq( v );
+
+        // TODO: make sure this is a deep copy
+        coef_prev = coef;
+
+        for (size_t i = 0; i < coef.n_elem; ++i)
+        {
+            coef[i] = Ztv[i] / (v_norm + np.lambda() * w[i]);
+        }
+
+        // TODO: is max the correct thing to do here?
+        eps = max( abs(coef - coef_prev) );
     }
 
+    coef = coef / l2_norm( coef );
+    // u = Z * coef;
 }
 
 

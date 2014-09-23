@@ -8,28 +8,31 @@
 class NipalsPenalty {
     public:
         // Given a vector, returns the W(x) function 
-        virtual arma::vec w(arma::vec &) const = 0;
+        virtual void w(const arma::vec &x, arma::vec &result) const = 0;
+        virtual double lambda() const = 0;
 };
 
-class LassoPenalty : NipalsPenalty {
+class LassoPenalty : public NipalsPenalty {
     public:
         LassoPenalty(double );
-        virtual arma::vec w(arma::vec&) const;
+        virtual void w(const arma::vec &x, arma::vec &result) const;
+        virtual double lambda() const;
     protected:
-        double lambda;
+        double lambda_;
 };
 
 LassoPenalty::LassoPenalty(double lam) :
-    lambda(lam)
+    lambda_(lam)
 {}
 
-arma::vec LassoPenalty::w(arma::vec& x) const
+void LassoPenalty::w(const arma::vec &x, arma::vec &result) const
 {
-    arma::vec res;
-    res = abs(x) + 1.0e-8;
+    result = abs(x) + 1.0e-8;
+}
 
-
-    return res;
+double LassoPenalty::lambda() const
+{
+    return lambda_;
 }
 
 #endif // PENALTIES_HPP

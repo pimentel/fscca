@@ -1,6 +1,6 @@
 library(microbenchmark)
 library(scca)
-library(sccaf)
+library(fscca)
 
 set.seed(42)
 
@@ -14,7 +14,7 @@ X <- scale(X, scale = T, center = F)
 Y <- scale(Y, scale = T, center = F)
 
 r_res <- scca::NIPALS(X,Y)
-cpp_res <- sccaf::nipals(X, Y)
+cpp_res <- fscca::nipals(X, Y)
 cpp_res$a1 <- round(cpp_res$a1, 4)
 cpp_res$b1 <- round(cpp_res$b1, 4)
 
@@ -22,7 +22,7 @@ all.equal(r_res, cpp_res)
 
 bench <- microbenchmark(
     R_time = scca::NIPALS(X, Y),
-    Cpp_time = sccaf::nipals(X, Y),
+    Cpp_time = fscca::nipals(X, Y),
     CCA_time = CCA::cc(X, Y),
     times = 1000
     )
@@ -35,7 +35,7 @@ Y <- matrix(rnorm(n*q), ncol=q)
 
 bench <- microbenchmark(
     R_time = scca::NIPALS(X, Y),
-    Cpp_time = sccaf::nipals(X, Y),
+    Cpp_time = fscca::nipals(X, Y),
     times = 1000
     )
 
