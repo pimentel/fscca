@@ -156,12 +156,8 @@ Rcpp::List sparse_nipals(Rcpp::NumericMatrix Xr, Rcpp::NumericMatrix Yr,
     a = a / l2_norm( a );
     b = b / l2_norm( b );
 
-    Rcpp::Rcout << "a\t" << a.n_elem << std::endl;
-    Rcpp::Rcout << "b\t" << b.n_elem << std::endl;
     u = X * a;
-    Rcpp::Rcout << "sup" << std::endl;
     v = Y * b;
-    Rcpp::Rcout << "nah" << std::endl;
     arma::vec rho = arma::trans(u) * v;
 
     Rcpp::List result = Rcpp::List::create(Rcpp::Named("rho") = rho,

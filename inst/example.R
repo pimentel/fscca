@@ -65,4 +65,14 @@ computeCov(r_res$a1, r_res$b1, X, Y)
 
 ################################################################################
 
-hi <- sparse_nipals(X, Y, 2, 3)
+hi <- sparse_nipals(X[1:10,], Y[1:10,], 2, 3)
+bye <- NIPALS.sparse(X[1:10, ], Y[1:10,], 2, 3, "LASSO")
+
+bench_sparse <- microbenchmark(
+    R_time = scca::NIPALS.sparse(X, Y, 2, 3, "LASSO"),
+    Cpp_time = fscca::sparse_nipals(X, Y, 2, 3),
+    times = 1000
+    )
+
+sum(abs(hi$a))
+sum(abs(bye$a))
