@@ -138,6 +138,7 @@ void sparse_nipals_(const arma::mat &X, const arma::mat &Y,
 
     arma::vec v_prev(Y.n_rows);
 
+    // TODO: make this a generic penalty
     LassoPenalty penalty_x(lamx);
     LassoPenalty penalty_y(lamy);
 
@@ -179,6 +180,7 @@ void sparse_nipals_(const arma::mat &X, const arma::mat &Y,
 }
 
 
+// XXX: *IMPORTANT* Does not update 'u' at the end. Must compute u = Z * coef
 void iterate_sparse_nipals(const arma::mat &Z, arma::vec &coef,
         arma::vec &u, const arma::vec &v, const NipalsPenalty& np)
 {
@@ -200,7 +202,6 @@ void iterate_sparse_nipals(const arma::mat &Z, arma::vec &coef,
             (n_iter < 50) )
     {
         // for now only compute LASSO
-        // TODO: make this a call a functor for penalty derivative
         np.w( coef, w );
 
         Ztv = arma::trans(Z) * v;
@@ -215,10 +216,8 @@ void iterate_sparse_nipals(const arma::mat &Z, arma::vec &coef,
             coef[i] = Ztv[i] / (v_norm + np.lambda() * w[i]);
         }
 
-        // TODO: is max the correct thing to do here?
         eps = arma::max( abs(coef - coef_prev) );
     }
 
     coef = coef / l2_norm( coef );
-    // u = Z * coef;
 }
