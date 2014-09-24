@@ -6,6 +6,7 @@ set.seed(42)
 
 n <- 10
 n <- 1000
+
 p <- 50
 q <- 20
 X <- matrix(rnorm(n*p), ncol=p)
@@ -84,7 +85,7 @@ sum(abs(bye$b))
 s_res <- scca(X,Y, "LASSO")
 all.equal(s_res$U[,1], as.numeric(X %*% s_res$A[,1]))
 s_res_1 <- NIPALS.sparse(X, Y, 1, 3, "LASSO")
-s_res_3 <- NIPALS.sparse(X, Y, 1, 3, "LASSO")
+s_res_3 <- NIPALS.sparse(X, Y, 3, 3, "LASSO")
 s_res_05 <- NIPALS.sparse(X, Y, 0.000005, 0.005, "LASSO")
 c(sum(abs(s_res_1$a1)), sum(abs(s_res_1$b1)))
 c(sum(abs(s_res_3$a1)), sum(abs(s_res_3$b1)))

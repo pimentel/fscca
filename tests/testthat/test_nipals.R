@@ -14,8 +14,8 @@ test_that("input dimensions are ok",
 test_that("out dimensions are correct",
     {
         res <- nipals(X, Y)
-        expect_equal(nrow(res$a1), p)
-        expect_equal(nrow(res$b1), q)
+        expect_equal(nrow(res$a), p)
+        expect_equal(nrow(res$b), q)
     })
 
 

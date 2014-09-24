@@ -7,6 +7,36 @@
 
 //' @useDynLib fscca
 
+// Requires a, b, u, and v to be allocated
+void nipals_(const arma::mat &X, const arma::mat &Y,
+        arma::vec &a, arma::vec &b,
+        arma::vec &u, arma::vec &v)
+{
+    double eps = 1.0;
+
+    v = Y.col(0);
+
+    arma::vec v_prev(Y.n_rows);
+
+    while (eps > NIPALS_EPS_CONVERGE)
+    {
+        a = arma::trans(X) * v;
+        a = a / l2_norm_sq( v );
+        a = a / l2_norm( a ) ;
+
+        u = X * a;
+
+        b = arma::trans(Y) * u;
+        b = b / l2_norm_sq( u );
+        b = b / l2_norm( b );
+
+        v_prev = v;
+
+        v = Y * b;
+        eps = arma::max(abs(v - v_prev));
+    }
+}
+
 
 //' NIPALS CCA algorithm
 //'
@@ -17,7 +47,6 @@
 // [[Rcpp::export]]
 Rcpp::List nipals(Rcpp::NumericMatrix Xr, Rcpp::NumericMatrix Yr) 
 {
-
     if (Xr.nrow() != Yr.nrow())
     {
         forward_exception_to_r(
@@ -25,51 +54,31 @@ Rcpp::List nipals(Rcpp::NumericMatrix Xr, Rcpp::NumericMatrix Yr)
                 );
     }
 
-    double eps = 1.0;
-
     arma::mat X = Rcpp::as<arma::mat>(Xr);
     arma::mat Y = Rcpp::as<arma::mat>(Yr);
 
-    arma::vec v1(Y.begin(), Y.n_rows, true);
+    // arma::vec v(Y.begin(), Y.n_rows, true);
 
-    arma::vec a1(X.n_cols);
-    arma::vec b1(Y.n_cols);
+    arma::vec a(X.n_cols);
+    arma::vec b(Y.n_cols);
 
-    arma::vec u1(X.n_rows);
-    arma::vec v1_old(Y.n_rows);
+    arma::vec u(X.n_rows);
+    arma::vec v(Y.n_rows);
 
-    while (eps > NIPALS_EPS_CONVERGE)
-    {
-        a1 = arma::trans(X) * v1;
-        a1 = a1 / l2_norm_sq( v1 );
-        a1 = a1 / l2_norm( a1 ) ;
+    nipals_(X, Y, a, b, u, v);
 
-        u1 = X * a1;
+    arma::mat rho = arma::trans(u) * v;
 
-        b1 = arma::trans(Y) * u1;
-        b1 = b1 / l2_norm_sq( u1 );
-        b1 = b1 / l2_norm( b1 );
-
-        v1_old = v1;
-
-        v1 = Y * b1;
-        eps = arma::max(abs(v1 - v1_old));
-    }
-
-    arma::vec rho1 = arma::trans(u1) * v1;
-
-    Rcpp::List result = Rcpp::List::create(Rcpp::Named("rho1") = rho1,
-            Rcpp::Named("u1") = u1,
-            Rcpp::Named("v1") = v1,
-            Rcpp::Named("a1") = a1,
-            Rcpp::Named("b1") = b1
+    Rcpp::List result = Rcpp::List::create(Rcpp::Named("rho") = rho,
+            Rcpp::Named("u") = u,
+            Rcpp::Named("v") = v,
+            Rcpp::Named("a") = a,
+            Rcpp::Named("b") = b
             );
 
     return result;
 }
 
-void iterate_sparse_nipals(const arma::mat &Z, arma::vec &coef,
-        arma::vec &u, const arma::vec &v, const NipalsPenalty& np);
 
 size_t count_zeros(const arma::vec &x)
 {
@@ -103,24 +112,40 @@ Rcpp::List sparse_nipals(Rcpp::NumericMatrix Xr, Rcpp::NumericMatrix Yr,
                 );
     }
 
-    // nipals will check the dimensions of X and Y
-    Rcpp::List init_res = nipals(Xr, Yr);
-
-    size_t p = Xr.ncol();
-    size_t q = Yr.ncol();
-    size_t n_iter = 0;
-
-    double eps = 1;
-
     arma::mat X = Rcpp::as<arma::mat>(Xr);
     arma::mat Y = Rcpp::as<arma::mat>(Yr);
 
-    arma::vec u(X.n_rows);
-    arma::vec v(Y.begin(), Y.n_rows, true);
-    arma::vec v_prev;
+    arma::vec a(X.n_cols), b(Y.n_cols), u(X.n_rows), v(Y.n_rows);
 
-    arma::vec a = Rcpp::as<arma::vec>(init_res["a1"]);
-    arma::vec b = Rcpp::as<arma::vec>(init_res["b1"]);
+    // nipals will check the dimensions of X and Y
+    sparse_nipals_(X, Y, a, b, u, v, lamx, lamy);
+
+    arma::vec rho = arma::trans(u) * v;
+
+    Rcpp::List result = Rcpp::List::create(Rcpp::Named("rho") = rho,
+            Rcpp::Named("u") = u,
+            Rcpp::Named("v") = v,
+            Rcpp::Named("a") = a,
+            Rcpp::Named("b") = b
+            );
+
+    return result;
+}
+
+void sparse_nipals_(const arma::mat &X, const arma::mat &Y,
+        arma::vec &a, arma::vec &b,
+        arma::vec &u, arma::vec &v,
+        double lamx, double lamy)
+{
+    size_t p = X.n_cols;
+    size_t q = Y.n_cols;
+    size_t n_iter = 0;
+
+    double eps = 1.0;
+
+    v = Y.col(0);
+
+    arma::vec v_prev(Y.n_rows);
 
     LassoPenalty penalty_x(lamx);
     LassoPenalty penalty_y(lamy);
@@ -131,7 +156,6 @@ Rcpp::List sparse_nipals(Rcpp::NumericMatrix Xr, Rcpp::NumericMatrix Yr,
     while ( (eps > S_NIPALS_EPS_CONVERGE) &&
             (n_iter < 100) )
     {
-        // TODO: write me
         iterate_sparse_nipals(X, a, u, v, penalty_x);
         u = X * a;
 
@@ -160,18 +184,9 @@ Rcpp::List sparse_nipals(Rcpp::NumericMatrix Xr, Rcpp::NumericMatrix Yr,
 
     u = X * a;
     v = Y * b;
-    arma::vec rho = arma::trans(u) * v;
 
-    Rcpp::List result = Rcpp::List::create(Rcpp::Named("rho") = rho,
-            Rcpp::Named("u") = u,
-            Rcpp::Named("v") = v,
-            Rcpp::Named("a") = a,
-            Rcpp::Named("b") = b,
-            Rcpp::Named("niter") = n_iter
-            );
-
-    return result;
 }
+
 
 void iterate_sparse_nipals(const arma::mat &Z, arma::vec &coef,
         arma::vec &u, const arma::vec &v, const NipalsPenalty& np)
