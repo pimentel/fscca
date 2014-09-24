@@ -7,6 +7,45 @@
 
 //' @useDynLib fscca
 
+//' NIPALS CCA algorithm
+//'
+//' @param x a matrix x that has been centered and scaled
+//' @param y a matrix y that has been centered and scaled
+//' @return a list containing a1 and b1
+//' @export
+// [[Rcpp::export]]
+Rcpp::List nipals(Rcpp::NumericMatrix Xr, Rcpp::NumericMatrix Yr) 
+{
+    if (Xr.nrow() != Yr.nrow())
+    {
+        forward_exception_to_r(
+                std::runtime_error("nrows of X and Y must be equal!")
+                );
+    }
+
+    arma::mat X = Rcpp::as<arma::mat>(Xr);
+    arma::mat Y = Rcpp::as<arma::mat>(Yr);
+
+    arma::vec a(X.n_cols);
+    arma::vec b(Y.n_cols);
+
+    arma::vec u(X.n_rows);
+    arma::vec v(Y.n_rows);
+
+    nipals_(X, Y, a, b, u, v);
+
+    arma::mat rho = arma::trans(u) * v;
+
+    Rcpp::List result = Rcpp::List::create(Rcpp::Named("rho") = rho,
+            Rcpp::Named("u") = u,
+            Rcpp::Named("v") = v,
+            Rcpp::Named("a") = a,
+            Rcpp::Named("b") = b
+            );
+
+    return result;
+}
+
 // Requires a, b, u, and v to be allocated
 void nipals_(const arma::mat &X, const arma::mat &Y,
         arma::vec &a, arma::vec &b,
@@ -36,49 +75,6 @@ void nipals_(const arma::mat &X, const arma::mat &Y,
         eps = arma::max(abs(v - v_prev));
     }
 }
-
-
-//' NIPALS CCA algorithm
-//'
-//' @param x a matrix x that has been centered and scaled
-//' @param y a matrix y that has been centered and scaled
-//' @return a list containing a1 and b1
-//' @export
-// [[Rcpp::export]]
-Rcpp::List nipals(Rcpp::NumericMatrix Xr, Rcpp::NumericMatrix Yr) 
-{
-    if (Xr.nrow() != Yr.nrow())
-    {
-        forward_exception_to_r(
-                std::runtime_error("nrows of X and Y must be equal!")
-                );
-    }
-
-    arma::mat X = Rcpp::as<arma::mat>(Xr);
-    arma::mat Y = Rcpp::as<arma::mat>(Yr);
-
-    // arma::vec v(Y.begin(), Y.n_rows, true);
-
-    arma::vec a(X.n_cols);
-    arma::vec b(Y.n_cols);
-
-    arma::vec u(X.n_rows);
-    arma::vec v(Y.n_rows);
-
-    nipals_(X, Y, a, b, u, v);
-
-    arma::mat rho = arma::trans(u) * v;
-
-    Rcpp::List result = Rcpp::List::create(Rcpp::Named("rho") = rho,
-            Rcpp::Named("u") = u,
-            Rcpp::Named("v") = v,
-            Rcpp::Named("a") = a,
-            Rcpp::Named("b") = b
-            );
-
-    return result;
-}
-
 
 size_t count_zeros(const arma::vec &x)
 {
@@ -143,7 +139,7 @@ void sparse_nipals_(const arma::mat &X, const arma::mat &Y,
 
     double eps = 1.0;
 
-    v = Y.col(0);
+    nipals_(X, Y, a, b, u, v);
 
     arma::vec v_prev(Y.n_rows);
 
