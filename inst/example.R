@@ -108,3 +108,28 @@ p_res_005 <- PMA::CCA(X, Y, penaltyx = 0.05, penaltyz = 0.05)
 p_res_01 <- PMA::CCA(X, Y, penaltyx = 0.01, penaltyz = 0.01)
 p_res_04 <- PMA::CCA(X, Y, penaltyx = 0.04, penaltyz = 0.04)
 sqrt(sum(c_res$a^2))
+
+# PMA simulations
+u <- matrix(c(rep(1,25),rep(0,75)),ncol=1)
+v1 <- matrix(c(rep(1,50),rep(0,450)),ncol=1)
+v2 <- matrix(c(rep(0,50),rep(1,50),rep(0,900)),ncol=1)
+x <- u%*%t(v1) + matrix(rnorm(100*500),ncol=500)
+z <- u%*%t(v2) + matrix(rnorm(100*1000),ncol=1000)
+
+meow <- sparse_nipals(x, z, 1, 1)
+meow <- sparse_nipals(x, z, 10, 20)
+c(sum(abs(meow$a)), sum(abs(meow$b)))
+c(sum(abs(out$u[,1])), sum(abs(out$v[,1]))
+hist(abs(out$u[,1]))
+hist(abs(meow$a))
+
+
+hi <- NIPALS.sparse(X, Y, 40000000, 40000000, "LASSO")
+hi <- NIPALS.sparse(X, Y, 2.5, 2.5, "LASSO")
+c(sum(abs(hi$a)), sum(abs(hi$b)))
+bye <- sparse_nipals(X, Y, 2.5, 2.5)
+bye <- sparse_nipals(X, Y, 40000000, 40000000)
+c(sum(abs(bye$a)), sum(abs(bye$b)))
+
+t(X %*% bye$a) %*% (Y %*% bye$b)
+t(X %*% hi$a) %*% (Y %*% hi$b)

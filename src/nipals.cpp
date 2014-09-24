@@ -3,6 +3,8 @@
 #include "fwd.hpp"
 #include "penalties.hpp"
 
+#include "nipals.h"
+
 //' @useDynLib fscca
 
 
