@@ -26,20 +26,3 @@ sparse_nipals <- function(Xr, Yr, lamx, lamy) {
     .Call('fscca_sparse_nipals', PACKAGE = 'fscca', Xr, Yr, lamx, lamy)
 }
 
-#' Hello world
-#'
-#' @return a list with foo bar
-#' @export
-rcpp_hello_world <- function() {
-    .Call('fscca_rcpp_hello_world', PACKAGE = 'fscca')
-}
-
-#' First column
-#'
-#' @param x a matrix
-#' @return the first column of the matrix
-#' @export
-firstColumn <- function(nm, c) {
-    .Call('fscca_firstColumn', PACKAGE = 'fscca', nm, c)
-}
-

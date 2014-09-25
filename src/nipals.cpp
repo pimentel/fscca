@@ -201,7 +201,6 @@ void iterate_sparse_nipals(const arma::mat &Z, arma::vec &coef,
     while ( (eps > S_NIPALS_EPS_CONVERGE) &&
             (n_iter < 50) )
     {
-        // for now only compute LASSO
         np.w( coef, w );
 
         Ztv = arma::trans(Z) * v;

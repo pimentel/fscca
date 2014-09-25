@@ -40,33 +40,3 @@ BEGIN_RCPP
     return __sexp_result;
 END_RCPP
 }
-// rcpp_hello_world
-Rcpp::List rcpp_hello_world();
-RcppExport SEXP fscca_rcpp_hello_world() {
-BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::List __result = rcpp_hello_world();
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
-END_RCPP
-}
-// firstColumn
-Rcpp::NumericVector firstColumn(Rcpp::NumericMatrix nm, int c);
-RcppExport SEXP fscca_firstColumn(SEXP nmSEXP, SEXP cSEXP) {
-BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type nm(nmSEXP );
-        Rcpp::traits::input_parameter< int >::type c(cSEXP );
-        Rcpp::NumericVector __result = firstColumn(nm, c);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
-END_RCPP
-}
