@@ -7,15 +7,15 @@
 using namespace Rcpp;
 
 // nipals
-Rcpp::List nipals(Rcpp::NumericMatrix Xr, Rcpp::NumericMatrix Yr);
-RcppExport SEXP fscca_nipals(SEXP XrSEXP, SEXP YrSEXP) {
+Rcpp::List nipals(Rcpp::NumericMatrix X, Rcpp::NumericMatrix Y);
+RcppExport SEXP fscca_nipals(SEXP XSEXP, SEXP YSEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
     {
         Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type Xr(XrSEXP );
-        Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type Yr(YrSEXP );
-        Rcpp::List __result = nipals(Xr, Yr);
+        Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type X(XSEXP );
+        Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type Y(YSEXP );
+        Rcpp::List __result = nipals(X, Y);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
     UNPROTECT(1);
@@ -23,17 +23,19 @@ BEGIN_RCPP
 END_RCPP
 }
 // sparse_nipals
-Rcpp::List sparse_nipals(Rcpp::NumericMatrix Xr, Rcpp::NumericMatrix Yr, double lamx, double lamy);
-RcppExport SEXP fscca_sparse_nipals(SEXP XrSEXP, SEXP YrSEXP, SEXP lamxSEXP, SEXP lamySEXP) {
+Rcpp::List sparse_nipals(Rcpp::NumericMatrix X, Rcpp::NumericMatrix Y, std::string penalty_x, std::string penalty_y, double lamx, double lamy);
+RcppExport SEXP fscca_sparse_nipals(SEXP XSEXP, SEXP YSEXP, SEXP penalty_xSEXP, SEXP penalty_ySEXP, SEXP lamxSEXP, SEXP lamySEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
     {
         Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type Xr(XrSEXP );
-        Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type Yr(YrSEXP );
+        Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type X(XSEXP );
+        Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type Y(YSEXP );
+        Rcpp::traits::input_parameter< std::string >::type penalty_x(penalty_xSEXP );
+        Rcpp::traits::input_parameter< std::string >::type penalty_y(penalty_ySEXP );
         Rcpp::traits::input_parameter< double >::type lamx(lamxSEXP );
         Rcpp::traits::input_parameter< double >::type lamy(lamySEXP );
-        Rcpp::List __result = sparse_nipals(Xr, Yr, lamx, lamy);
+        Rcpp::List __result = sparse_nipals(X, Y, penalty_x, penalty_y, lamx, lamy);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
     UNPROTECT(1);

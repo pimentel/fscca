@@ -4,30 +4,30 @@
 
 //' NIPALS CCA algorithm
 //'
-//' @param x a matrix x that has been centered and scaled
-//' @param y a matrix y that has been centered and scaled
-//' @return a list containing a1 and b1
+//' @param X a matrix X that has been centered and scaled
+//' @param Y a matrix Y that has been centered and scaled
+//' @return a list containing a, b, u, v, and rho
 //' @export
 // [[Rcpp::export]]
-Rcpp::List nipals(Rcpp::NumericMatrix Xr, Rcpp::NumericMatrix Yr) 
+Rcpp::List nipals(Rcpp::NumericMatrix X, Rcpp::NumericMatrix Y)
 {
-    if (Xr.nrow() != Yr.nrow())
+    if (X.nrow() != Y.nrow())
     {
         forward_exception_to_r(
                 std::runtime_error("nrows of X and Y must be equal!")
                 );
     }
 
-    arma::mat X = Rcpp::as<arma::mat>(Xr);
-    arma::mat Y = Rcpp::as<arma::mat>(Yr);
+    arma::mat X_ = Rcpp::as<arma::mat>(X);
+    arma::mat Y_ = Rcpp::as<arma::mat>(Y);
 
-    arma::vec a(X.n_cols);
-    arma::vec b(Y.n_cols);
+    arma::vec a(X_.n_cols);
+    arma::vec b(Y_.n_cols);
 
-    arma::vec u(X.n_rows);
-    arma::vec v(Y.n_rows);
+    arma::vec u(X_.n_rows);
+    arma::vec v(Y_.n_rows);
 
-    nipals_(X, Y, a, b, u, v);
+    nipals_(X_, Y_, a, b, u, v);
 
     arma::mat rho = arma::trans(u) * v;
 
@@ -86,14 +86,17 @@ size_t count_zeros(const arma::vec &x)
 
 //' Sparse NIPALS CCA algorithm
 //'
-//' @param x a matrix x that has been centered and scaled
-//' @param y a matrix y that has been centered and scaled
-//' @param lamx a positive enalty on 'a'
+//' @param X a matrix X that has been centered and scaled
+//' @param Y a matrix Y that has been centered and scaled
+//' @param penalty_x A character string of type "lasso"
+//' @param penalty_y A character string of type "lasso"
+//' @param lamx a positive penalty on 'a'
 //' @param lamy a positive penalty on 'b'
-//' @return a list containing a1 and b1
+//' @return a list containing a, b, u, v, and rho (covariance)
 //' @export
 // [[Rcpp::export]]
-Rcpp::List sparse_nipals(Rcpp::NumericMatrix Xr, Rcpp::NumericMatrix Yr,
+Rcpp::List sparse_nipals(Rcpp::NumericMatrix X, Rcpp::NumericMatrix Y,
+        std::string penalty_x, std::string penalty_y,
         double lamx, double lamy)
 {
     if (lamx < 0.0 || lamy < 0.0)
@@ -103,13 +106,18 @@ Rcpp::List sparse_nipals(Rcpp::NumericMatrix Xr, Rcpp::NumericMatrix Yr,
                 );
     }
 
-    arma::mat X = Rcpp::as<arma::mat>(Xr);
-    arma::mat Y = Rcpp::as<arma::mat>(Yr);
+    std::unique_ptr< NipalsPenalty > np_x = 
+        PenaltyFactory::make_penalty( penalty_x, lamx );
+    std::unique_ptr< NipalsPenalty > np_y = 
+        PenaltyFactory::make_penalty( penalty_y, lamy );
 
-    arma::vec a(X.n_cols), b(Y.n_cols), u(X.n_rows), v(Y.n_rows);
+    arma::mat X_ = Rcpp::as<arma::mat>(X);
+    arma::mat Y_ = Rcpp::as<arma::mat>(Y);
 
-    // nipals will check the dimensions of X and Y
-    sparse_nipals_(X, Y, a, b, u, v, lamx, lamy);
+    arma::vec a(X_.n_cols), b(Y_.n_cols), u(X_.n_rows), v(Y_.n_rows);
+
+    // nipals will check the dimensions of X_ and Y_
+    sparse_nipals_(X_, Y_, a, b, u, v, *np_x, *np_y);
 
     arma::vec rho = arma::trans(u) * v;
 
@@ -126,7 +134,8 @@ Rcpp::List sparse_nipals(Rcpp::NumericMatrix Xr, Rcpp::NumericMatrix Yr,
 void sparse_nipals_(const arma::mat &X, const arma::mat &Y,
         arma::vec &a, arma::vec &b,
         arma::vec &u, arma::vec &v,
-        double lamx, double lamy)
+        const NipalsPenalty &penalty_x,
+        const NipalsPenalty &penalty_y)
 {
     size_t p = X.n_cols;
     size_t q = Y.n_cols;
@@ -137,10 +146,6 @@ void sparse_nipals_(const arma::mat &X, const arma::mat &Y,
     nipals_(X, Y, a, b, u, v);
 
     arma::vec v_prev(Y.n_rows);
-
-    // TODO: make this a generic penalty
-    LassoPenalty penalty_x(lamx);
-    LassoPenalty penalty_y(lamy);
 
     size_t a_zeros;
     size_t b_zeros;

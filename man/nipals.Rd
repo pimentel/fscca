@@ -3,15 +3,15 @@
 \alias{nipals}
 \title{NIPALS CCA algorithm}
 \usage{
-nipals(Xr, Yr)
+nipals(X, Y)
 }
 \arguments{
-\item{x}{a matrix x that has been centered and scaled}
+\item{X}{a matrix X that has been centered and scaled}
 
-\item{y}{a matrix y that has been centered and scaled}
+\item{Y}{a matrix Y that has been centered and scaled}
 }
 \value{
-a list containing a1 and b1
+a list containing a, b, u, v, and rho
 }
 \description{
 NIPALS CCA algorithm

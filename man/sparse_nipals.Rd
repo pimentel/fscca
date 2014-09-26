@@ -3,19 +3,23 @@
 \alias{sparse_nipals}
 \title{Sparse NIPALS CCA algorithm}
 \usage{
-sparse_nipals(Xr, Yr, lamx, lamy)
+sparse_nipals(X, Y, penalty_x, penalty_y, lamx, lamy)
 }
 \arguments{
-\item{lamx}{a positive enalty on 'a'}
+\item{X}{a matrix X that has been centered and scaled}
+
+\item{Y}{a matrix Y that has been centered and scaled}
+
+\item{penalty_x}{A character string of type "lasso"}
+
+\item{penalty_y}{A character string of type "lasso"}
+
+\item{lamx}{a positive penalty on 'a'}
 
 \item{lamy}{a positive penalty on 'b'}
-
-\item{x}{a matrix x that has been centered and scaled}
-
-\item{y}{a matrix y that has been centered and scaled}
 }
 \value{
-a list containing a1 and b1
+a list containing a, b, u, v, and rho (covariance)
 }
 \description{
 Sparse NIPALS CCA algorithm

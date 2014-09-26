@@ -6,23 +6,25 @@ NULL
 
 #' NIPALS CCA algorithm
 #'
-#' @param x a matrix x that has been centered and scaled
-#' @param y a matrix y that has been centered and scaled
-#' @return a list containing a1 and b1
+#' @param X a matrix X that has been centered and scaled
+#' @param Y a matrix Y that has been centered and scaled
+#' @return a list containing a, b, u, v, and rho
 #' @export
-nipals <- function(Xr, Yr) {
-    .Call('fscca_nipals', PACKAGE = 'fscca', Xr, Yr)
+nipals <- function(X, Y) {
+    .Call('fscca_nipals', PACKAGE = 'fscca', X, Y)
 }
 
 #' Sparse NIPALS CCA algorithm
 #'
-#' @param x a matrix x that has been centered and scaled
-#' @param y a matrix y that has been centered and scaled
-#' @param lamx a positive enalty on 'a'
+#' @param X a matrix X that has been centered and scaled
+#' @param Y a matrix Y that has been centered and scaled
+#' @param penalty_x A character string of type "lasso"
+#' @param penalty_y A character string of type "lasso"
+#' @param lamx a positive penalty on 'a'
 #' @param lamy a positive penalty on 'b'
-#' @return a list containing a1 and b1
+#' @return a list containing a, b, u, v, and rho (covariance)
 #' @export
-sparse_nipals <- function(Xr, Yr, lamx, lamy) {
-    .Call('fscca_sparse_nipals', PACKAGE = 'fscca', Xr, Yr, lamx, lamy)
+sparse_nipals <- function(X, Y, penalty_x, penalty_y, lamx, lamy) {
+    .Call('fscca_sparse_nipals', PACKAGE = 'fscca', X, Y, penalty_x, penalty_y, lamx, lamy)
 }
 
