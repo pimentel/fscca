@@ -197,6 +197,22 @@ m <- rnorm(ncol(X))
 bench <- microbenchmark(
     R = X[z,] %*% m,
     Cpp = get_submatrix_mult(X, z, m),
+    Cpp_ptr = get_submatrix_mult_ptr(X, z, m),
     times = 10000)
 
 ggplot(bench, aes(expr, time)) + geom_boxplot() + ylim(0, 800000)
+
+
+# testing shuffle
+x <- 1:4
+shuf_dist <- lapply(1:1000, function(i)
+    {
+        shuf_gen <- lapply(1:100000, function(it)
+            {
+                paste(shuffle(x), collapse = "")
+            })
+        table(unlist(shuf_gen))
+    })
+
+s_d <- rbindlist(lapply(shuf_dist, data.frame))
+ggplot(s_d, aes(factor(Var1), Freq)) + geom_boxplot()

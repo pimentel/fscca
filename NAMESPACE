@@ -2,6 +2,8 @@
 
 export(get_submatrix)
 export(get_submatrix_mult)
+export(get_submatrix_mult_ptr)
 export(nipals)
 export(sparse_nipals)
+export(split_in_groups)
 useDynLib(fscca)

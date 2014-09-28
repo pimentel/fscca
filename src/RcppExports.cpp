@@ -6,6 +6,22 @@
 
 using namespace Rcpp;
 
+// split_in_groups
+arma::vec split_in_groups(size_t length, size_t k);
+RcppExport SEXP fscca_split_in_groups(SEXP lengthSEXP, SEXP kSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< size_t >::type length(lengthSEXP );
+        Rcpp::traits::input_parameter< size_t >::type k(kSEXP );
+        arma::vec __result = split_in_groups(length, k);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
 // nipals
 Rcpp::List nipals(const arma::mat& X, const arma::mat& Y);
 RcppExport SEXP fscca_nipals(SEXP XSEXP, SEXP YSEXP) {
@@ -69,6 +85,23 @@ BEGIN_RCPP
         Rcpp::traits::input_parameter< const arma::uvec& >::type which_rows(which_rowsSEXP );
         Rcpp::traits::input_parameter< const arma::vec& >::type v(vSEXP );
         arma::vec __result = get_submatrix_mult(X_, which_rows, v);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// get_submatrix_mult_ptr
+arma::vec get_submatrix_mult_ptr(const arma::mat& X, const arma::uvec& which_rows, const arma::vec& v);
+RcppExport SEXP fscca_get_submatrix_mult_ptr(SEXP XSEXP, SEXP which_rowsSEXP, SEXP vSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< const arma::mat& >::type X(XSEXP );
+        Rcpp::traits::input_parameter< const arma::uvec& >::type which_rows(which_rowsSEXP );
+        Rcpp::traits::input_parameter< const arma::vec& >::type v(vSEXP );
+        arma::vec __result = get_submatrix_mult_ptr(X, which_rows, v);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
     UNPROTECT(1);
