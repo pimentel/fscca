@@ -8,6 +8,8 @@
 
 #define ROUND_ZERO 5e-5
 
+#define DELTA 1.0e-08
+
 double square(double x)
 {
     return x * x;

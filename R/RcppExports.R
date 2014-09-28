@@ -28,3 +28,8 @@ sparse_nipals <- function(X, Y, penalty_x, penalty_y, lamx, lamy) {
     .Call('fscca_sparse_nipals', PACKAGE = 'fscca', X, Y, penalty_x, penalty_y, lamx, lamy)
 }
 
+#' @export
+get_submatrix <- function(&X_, &which_rows) {
+    .Call('fscca_get_submatrix', PACKAGE = 'fscca', &X_, &which_rows)
+}
+

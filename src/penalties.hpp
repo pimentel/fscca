@@ -6,17 +6,20 @@
 #include <memory>
 
 // TODO: Unit test C++
+// TODO: Include constructor with 'X' and 'a' for H30 and SCAD
 
 class NipalsPenalty {
     public:
         // Given a vector, returns the W(x) function 
         virtual void w(const arma::vec &x, arma::vec &result) const = 0;
         virtual double lambda() const = 0;
+        virtual ~NipalsPenalty(){};
 };
 
 class LassoPenalty : public NipalsPenalty {
     public:
         LassoPenalty(double );
+        ~LassoPenalty() {}
         virtual void w(const arma::vec &x, arma::vec &result) const;
         virtual double lambda() const;
     protected:
@@ -29,13 +32,21 @@ LassoPenalty::LassoPenalty(double lam) :
 
 void LassoPenalty::w(const arma::vec &x, arma::vec &result) const
 {
-    result = 1 / (arma::abs(x) + 1.0e-8);
+    result = 1 / (arma::abs(x) + DELTA);
 }
 
 double LassoPenalty::lambda() const
 {
     return lambda_;
 }
+
+class HLPenalty : public NipalsPenalty {
+    public:
+        HLPenalty(double );
+        ~HLPenalty() {}
+    protected:
+        double lambda_;
+};
 
 class PenaltyFactory {
     public:
