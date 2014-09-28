@@ -8,14 +8,14 @@
 #include "fwd.hpp"
 #include "penalties.hpp"
 
-Rcpp::List nipals(Rcpp::NumericMatrix X, Rcpp::NumericMatrix Y);
+Rcpp::List nipals(const arma::mat &X, const arma::mat &Y);
 
 void nipals_(const arma::mat &X, const arma::mat &Y,
         arma::vec &a, arma::vec &b,
         arma::vec &u, arma::vec &v);
 
-Rcpp::List sparse_nipals(Rcpp::NumericMatrix X, Rcpp::NumericMatrix Y,
-        std::string penalty_x, std::string penalty_y,
+Rcpp::List sparse_nipals(const arma::mat& X, const arma::mat& Y,
+        const std::string& penalty_x, const std::string& penalty_y,
         double lamx, double lamy);
 
 void sparse_nipals_(const arma::mat &X, const arma::mat &Y,

@@ -2,6 +2,8 @@
 
 //' @useDynLib fscca
 
+// [[Rcpp::depends(RcppArmadillo)]]
+
 //' NIPALS CCA algorithm
 //'
 //' @param X a matrix X that has been centered and scaled
@@ -9,25 +11,22 @@
 //' @return a list containing a, b, u, v, and rho
 //' @export
 // [[Rcpp::export]]
-Rcpp::List nipals(Rcpp::NumericMatrix X, Rcpp::NumericMatrix Y)
+Rcpp::List nipals(const arma::mat& X, const arma::mat& Y)
 {
-    if (X.nrow() != Y.nrow())
+    if (X.n_rows != Y.n_rows)
     {
         forward_exception_to_r(
                 std::runtime_error("nrows of X and Y must be equal!")
                 );
     }
 
-    arma::mat X_ = Rcpp::as<arma::mat>(X);
-    arma::mat Y_ = Rcpp::as<arma::mat>(Y);
+    arma::vec a(X.n_cols);
+    arma::vec b(Y.n_cols);
 
-    arma::vec a(X_.n_cols);
-    arma::vec b(Y_.n_cols);
+    arma::vec u(X.n_rows);
+    arma::vec v(Y.n_rows);
 
-    arma::vec u(X_.n_rows);
-    arma::vec v(Y_.n_rows);
-
-    nipals_(X_, Y_, a, b, u, v);
+    nipals_(X, Y, a, b, u, v);
 
     arma::mat rho = arma::trans(u) * v;
 
@@ -95,8 +94,8 @@ size_t count_zeros(const arma::vec &x)
 //' @return a list containing a, b, u, v, and rho (covariance)
 //' @export
 // [[Rcpp::export]]
-Rcpp::List sparse_nipals(Rcpp::NumericMatrix X, Rcpp::NumericMatrix Y,
-        std::string penalty_x, std::string penalty_y,
+Rcpp::List sparse_nipals(const arma::mat& X, const arma::mat& Y,
+        const std::string& penalty_x, const std::string& penalty_y,
         double lamx, double lamy)
 {
     if (lamx < 0.0 || lamy < 0.0)
@@ -111,13 +110,10 @@ Rcpp::List sparse_nipals(Rcpp::NumericMatrix X, Rcpp::NumericMatrix Y,
     std::unique_ptr< NipalsPenalty > np_y = 
         PenaltyFactory::make_penalty( penalty_y, lamy );
 
-    arma::mat X_ = Rcpp::as<arma::mat>(X);
-    arma::mat Y_ = Rcpp::as<arma::mat>(Y);
-
-    arma::vec a(X_.n_cols), b(Y_.n_cols), u(X_.n_rows), v(Y_.n_rows);
+    arma::vec a(X.n_cols), b(Y.n_cols), u(X.n_rows), v(Y.n_rows);
 
     // nipals will check the dimensions of X_ and Y_
-    sparse_nipals_(X_, Y_, a, b, u, v, *np_x, *np_y);
+    sparse_nipals_(X, Y, a, b, u, v, *np_x, *np_y);
 
     arma::vec rho = arma::trans(u) * v;
 

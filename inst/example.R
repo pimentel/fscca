@@ -134,3 +134,50 @@ c(sum(abs(bye$a)), sum(abs(bye$b)))
 
 t(X %*% bye$a) %*% (Y %*% bye$b)
 t(X %*% hi$a) %*% (Y %*% hi$b)
+
+
+set.seed(42)
+n <- 1000
+
+p <- 50
+q <- 20
+X <- matrix(rnorm(n*p), ncol=p)
+Y <- matrix(rnorm(n*q), ncol=q)
+
+X <- scale(X, scale = T, center = F)
+Y <- scale(Y, scale = T, center = F)
+
+bench <- microbenchmark(
+    R_time = scca::NIPALS.sparse(X, Y, 2.0, 3.0, "LASSO"),
+    Cpp_time = fscca::sparse_nipals(X, Y, "lasso", "lasso", 2.0, 3.0),
+    times = 1000
+    )
+
+# Unit: milliseconds
+#      expr      min       lq   median       uq       max neval
+#    R_time 45.70580 47.67376 57.70300 64.41011 259.85699  1000
+#  Cpp_time 13.15465 13.30561 13.44036 14.95119  33.17595  1000
+# Unit: milliseconds
+#      expr      min       lq   median       uq       max neval
+#    R_time 45.59999 46.62820 47.82320 59.41712 232.38032  1000
+#  Cpp_time 13.12863 13.23349 13.29242 13.35226  17.89528  1000
+
+
+
+set.seed(42)
+n <- 40
+
+p <- 2000
+q <- 2200
+X <- matrix(rnorm(n*p), ncol=p)
+Y <- matrix(rnorm(n*q), ncol=q)
+
+X <- scale(X, scale = T, center = F)
+Y <- scale(Y, scale = T, center = F)
+
+
+bench <- microbenchmark(
+    R_time = scca::NIPALS.sparse(X, Y, 3.0, 3.0, "LASSO"),
+    Cpp_time = fscca::sparse_nipals(X, Y, "lasso", "lasso", 3.0, 3.0),
+    times = 50
+    )

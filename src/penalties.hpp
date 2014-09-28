@@ -55,7 +55,6 @@ class PenaltyFactory {
         {
             if (type.compare( "lasso" ) == 0)
             {
-                Rcpp::Rcout << "Using lasso penalty." << std::endl;
                 return std::unique_ptr<NipalsPenalty>( new LassoPenalty(lam) );
             }
 
