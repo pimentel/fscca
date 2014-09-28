@@ -6,6 +6,16 @@ split_in_groups <- function(length, k) {
     .Call('fscca_split_in_groups', PACKAGE = 'fscca', length, k)
 }
 
+#' @export
+groups_to_rows <- function(x, k) {
+    .Call('fscca_groups_to_rows', PACKAGE = 'fscca', x, k)
+}
+
+#' @export
+ret_list <- function(x) {
+    .Call('fscca_ret_list', PACKAGE = 'fscca', x)
+}
+
 #' @useDynLib fscca
 NULL
 

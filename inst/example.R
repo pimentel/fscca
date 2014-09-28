@@ -216,3 +216,8 @@ shuf_dist <- lapply(1:1000, function(i)
 
 s_d <- rbindlist(lapply(shuf_dist, data.frame))
 ggplot(s_d, aes(factor(Var1), Freq)) + geom_boxplot()
+
+
+# split into k-groups
+
+kfold <- groups_to_rows(split_in_groups(10, 3), 3)
