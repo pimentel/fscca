@@ -43,15 +43,32 @@ BEGIN_RCPP
 END_RCPP
 }
 // get_submatrix
-arma::mat get_submatrix(arma::mat X_, arma::uvec which_rows);
+arma::mat get_submatrix(const arma::mat& X_, const arma::uvec& which_rows);
 RcppExport SEXP fscca_get_submatrix(SEXP X_SEXP, SEXP which_rowsSEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
     {
         Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< arma::mat >::type X_(X_SEXP );
-        Rcpp::traits::input_parameter< arma::uvec >::type which_rows(which_rowsSEXP );
+        Rcpp::traits::input_parameter< const arma::mat& >::type X_(X_SEXP );
+        Rcpp::traits::input_parameter< const arma::uvec& >::type which_rows(which_rowsSEXP );
         arma::mat __result = get_submatrix(X_, which_rows);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// get_submatrix_mult
+arma::vec get_submatrix_mult(const arma::mat& X_, const arma::uvec& which_rows, const arma::vec& v);
+RcppExport SEXP fscca_get_submatrix_mult(SEXP X_SEXP, SEXP which_rowsSEXP, SEXP vSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< const arma::mat& >::type X_(X_SEXP );
+        Rcpp::traits::input_parameter< const arma::uvec& >::type which_rows(which_rowsSEXP );
+        Rcpp::traits::input_parameter< const arma::vec& >::type v(vSEXP );
+        arma::vec __result = get_submatrix_mult(X_, which_rows, v);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
     UNPROTECT(1);

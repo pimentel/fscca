@@ -33,3 +33,8 @@ get_submatrix <- function(X_, which_rows) {
     .Call('fscca_get_submatrix', PACKAGE = 'fscca', X_, which_rows)
 }
 
+#' @export
+get_submatrix_mult <- function(X_, which_rows, v) {
+    .Call('fscca_get_submatrix_mult', PACKAGE = 'fscca', X_, which_rows, v)
+}
+

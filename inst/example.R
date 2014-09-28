@@ -181,3 +181,22 @@ bench <- microbenchmark(
     Cpp_time = fscca::sparse_nipals(X, Y, "lasso", "lasso", 3.0, 3.0),
     times = 50
     )
+
+z <- sample.int(40, 32)
+
+bench <- microbenchmark(
+    R = X[z,],
+    Cpp = get_submatrix(X, z),
+    times = 10000)
+
+ggplot(bench, aes(expr, time)) + geom_boxplot()
+    + ylim(0, 600000)
+
+m <- rnorm(ncol(X))
+
+bench <- microbenchmark(
+    R = X[z,] %*% m,
+    Cpp = get_submatrix_mult(X, z, m),
+    times = 10000)
+
+ggplot(bench, aes(expr, time)) + geom_boxplot() + ylim(0, 800000)
