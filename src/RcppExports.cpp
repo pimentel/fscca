@@ -38,6 +38,37 @@ BEGIN_RCPP
     return __sexp_result;
 END_RCPP
 }
+// practice_arma
+Rcpp::NumericVector practice_arma(arma::vec& x);
+RcppExport SEXP fscca_practice_arma(SEXP xSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< arma::vec& >::type x(xSEXP );
+        Rcpp::NumericVector __result = practice_arma(x);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// split_cv
+Rcpp::List split_cv(size_t n_rows, size_t k);
+RcppExport SEXP fscca_split_cv(SEXP n_rowsSEXP, SEXP kSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< size_t >::type n_rows(n_rowsSEXP );
+        Rcpp::traits::input_parameter< size_t >::type k(kSEXP );
+        Rcpp::List __result = split_cv(n_rows, k);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
 // ret_list
 Rcpp::List ret_list(Rcpp::NumericVector x);
 RcppExport SEXP fscca_ret_list(SEXP xSEXP) {

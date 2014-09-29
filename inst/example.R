@@ -220,4 +220,13 @@ ggplot(s_d, aes(factor(Var1), Freq)) + geom_boxplot()
 
 # split into k-groups
 
+kfold <- groups_to_rows_ptr(split_in_groups(10, 3), 3)
+
 kfold <- groups_to_rows(split_in_groups(10, 3), 3)
+
+test_cv <- split_cv(51, 5)
+
+cv_bench <- microbenchmark(
+    withR = groups_to_rows(split_in_groups(51, 5), 5),
+    allCpp = split_cv(51, 5),
+    times = 1000)

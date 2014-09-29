@@ -12,6 +12,16 @@ groups_to_rows <- function(x, k) {
 }
 
 #' @export
+practice_arma <- function(x) {
+    .Call('fscca_practice_arma', PACKAGE = 'fscca', x)
+}
+
+#' @export
+split_cv <- function(n_rows, k) {
+    .Call('fscca_split_cv', PACKAGE = 'fscca', n_rows, k)
+}
+
+#' @export
 ret_list <- function(x) {
     .Call('fscca_ret_list', PACKAGE = 'fscca', x)
 }
