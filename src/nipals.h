@@ -5,8 +5,7 @@
 
 #include <RcppArmadillo.h>
 
-#include "fwd.hpp"
-#include "penalties.hpp"
+#include "penalties.h"
 
 Rcpp::List nipals(const arma::mat &X, const arma::mat &Y);
 
@@ -29,6 +28,10 @@ void iterate_sparse_nipals(const arma::mat &Z, arma::vec &coef,
         arma::vec &u, const arma::vec &v, const NipalsPenalty &np);
 
 size_t count_zeros(const arma::vec &x);
+
+double nipals_cor(const arma::mat& X, const arma::mat& Y,
+        const arma::vec& a, const arma::vec& b);
+double nipals_cor(const arma::vec& u, const arma::vec& v);
 
 
 #endif // NIPALS_H

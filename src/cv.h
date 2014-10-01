@@ -7,8 +7,7 @@
 
 #include <RcppArmadillo.h>
 
-// TODO: figure out include fwd.hpp correctly...
-// #include "fwd.hpp"
-
+#include "nipals.h"
+#include "penalties.h"
 
 #endif // CV_H

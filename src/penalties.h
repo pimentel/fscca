@@ -1,9 +1,11 @@
 #ifndef PENALTIES_HPP
 #define PENALTIES_HPP
 
+#include <memory>
+
 #include <RcppArmadillo.h>
 
-#include <memory>
+#include "fwd.h"
 
 // TODO: Unit test C++
 // TODO: Include constructor with 'X' and 'a' for H30 and SCAD
@@ -26,19 +28,6 @@ class LassoPenalty : public NipalsPenalty {
         double lambda_;
 };
 
-LassoPenalty::LassoPenalty(double lam) :
-    lambda_(lam)
-{}
-
-void LassoPenalty::w(const arma::vec &x, arma::vec &result) const
-{
-    result = 1 / (arma::abs(x) + DELTA);
-}
-
-double LassoPenalty::lambda() const
-{
-    return lambda_;
-}
 
 class HLPenalty : public NipalsPenalty {
     public:
@@ -50,7 +39,8 @@ class HLPenalty : public NipalsPenalty {
 
 class PenaltyFactory {
     public:
-        static std::unique_ptr<NipalsPenalty> make_penalty(const std::string &type,
+        static std::unique_ptr<NipalsPenalty> make_penalty(
+                const std::string &type,
                 double lam)
         {
             if (type.compare( "lasso" ) == 0)

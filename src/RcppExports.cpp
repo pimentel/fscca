@@ -7,7 +7,7 @@
 using namespace Rcpp;
 
 // split_in_groups
-arma::vec split_in_groups(size_t length, size_t k);
+arma::uvec split_in_groups(size_t length, size_t k);
 RcppExport SEXP fscca_split_in_groups(SEXP lengthSEXP, SEXP kSEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
@@ -15,7 +15,7 @@ BEGIN_RCPP
         Rcpp::RNGScope __rngScope;
         Rcpp::traits::input_parameter< size_t >::type length(lengthSEXP );
         Rcpp::traits::input_parameter< size_t >::type k(kSEXP );
-        arma::vec __result = split_in_groups(length, k);
+        arma::uvec __result = split_in_groups(length, k);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
     UNPROTECT(1);
@@ -23,30 +23,15 @@ BEGIN_RCPP
 END_RCPP
 }
 // groups_to_rows
-Rcpp::List groups_to_rows(const arma::vec& x, size_t k);
+Rcpp::List groups_to_rows(const arma::uvec& x, size_t k);
 RcppExport SEXP fscca_groups_to_rows(SEXP xSEXP, SEXP kSEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
     {
         Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< const arma::vec& >::type x(xSEXP );
+        Rcpp::traits::input_parameter< const arma::uvec& >::type x(xSEXP );
         Rcpp::traits::input_parameter< size_t >::type k(kSEXP );
         Rcpp::List __result = groups_to_rows(x, k);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
-END_RCPP
-}
-// practice_arma
-Rcpp::NumericVector practice_arma(arma::vec& x);
-RcppExport SEXP fscca_practice_arma(SEXP xSEXP) {
-BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< arma::vec& >::type x(xSEXP );
-        Rcpp::NumericVector __result = practice_arma(x);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
     UNPROTECT(1);
@@ -63,21 +48,6 @@ BEGIN_RCPP
         Rcpp::traits::input_parameter< size_t >::type n_rows(n_rowsSEXP );
         Rcpp::traits::input_parameter< size_t >::type k(kSEXP );
         Rcpp::List __result = split_cv(n_rows, k);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
-END_RCPP
-}
-// ret_list
-Rcpp::List ret_list(Rcpp::NumericVector x);
-RcppExport SEXP fscca_ret_list(SEXP xSEXP) {
-BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< Rcpp::NumericVector >::type x(xSEXP );
-        Rcpp::List __result = ret_list(x);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
     UNPROTECT(1);
@@ -164,6 +134,21 @@ BEGIN_RCPP
         Rcpp::traits::input_parameter< const arma::uvec& >::type which_rows(which_rowsSEXP );
         Rcpp::traits::input_parameter< const arma::vec& >::type v(vSEXP );
         arma::vec __result = get_submatrix_mult_ptr(X, which_rows, v);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// practice_arma
+Rcpp::NumericVector practice_arma(arma::vec& x);
+RcppExport SEXP fscca_practice_arma(SEXP xSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< arma::vec& >::type x(xSEXP );
+        Rcpp::NumericVector __result = practice_arma(x);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
     UNPROTECT(1);

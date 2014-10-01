@@ -13,13 +13,6 @@
 // [[Rcpp::export]]
 Rcpp::List nipals(const arma::mat& X, const arma::mat& Y)
 {
-    if (X.n_rows != Y.n_rows)
-    {
-        forward_exception_to_r(
-                std::runtime_error("nrows of X and Y must be equal!")
-                );
-    }
-
     arma::vec a(X.n_cols);
     arma::vec b(Y.n_cols);
 
@@ -45,6 +38,13 @@ void nipals_(const arma::mat &X, const arma::mat &Y,
         arma::vec &a, arma::vec &b,
         arma::vec &u, arma::vec &v)
 {
+    if (X.n_rows != Y.n_rows)
+    {
+        forward_exception_to_r(
+                std::runtime_error("nrows of X and Y must be equal!")
+                );
+    }
+
     double eps = 1.0;
 
     v = Y.col(0);
@@ -98,12 +98,6 @@ Rcpp::List sparse_nipals(const arma::mat& X, const arma::mat& Y,
         const std::string& penalty_x, const std::string& penalty_y,
         double lamx, double lamy)
 {
-    if (lamx < 0.0 || lamy < 0.0)
-    {
-        forward_exception_to_r(
-                std::runtime_error("lamx and lamy must be at least 0.0")
-                );
-    }
 
     std::unique_ptr< NipalsPenalty > np_x = 
         PenaltyFactory::make_penalty( penalty_x, lamx );
@@ -127,6 +121,8 @@ Rcpp::List sparse_nipals(const arma::mat& X, const arma::mat& Y,
     return result;
 }
 
+// In: X, Y, penalty_x, penalty_y
+// Out: a, b, u, v. Requires these variables to be preallocated
 void sparse_nipals_(const arma::mat &X, const arma::mat &Y,
         arma::vec &a, arma::vec &b,
         arma::vec &u, arma::vec &v,
@@ -220,4 +216,17 @@ void iterate_sparse_nipals(const arma::mat &Z, arma::vec &coef,
     }
 
     coef = coef / l2_norm( coef );
+}
+
+double nipals_cor(const arma::vec& u, const arma::vec& v)
+{
+    arma::mat res = arma::trans( u ) * v;
+    return res(0, 0) / (u.n_rows - 1);
+}
+
+
+double nipals_cor(const arma::mat& X, const arma::mat& Y,
+        const arma::vec& a, const arma::vec& b)
+{
+    return nipals_cor( X * a, Y * b );
 }

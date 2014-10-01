@@ -12,18 +12,8 @@ groups_to_rows <- function(x, k) {
 }
 
 #' @export
-practice_arma <- function(x) {
-    .Call('fscca_practice_arma', PACKAGE = 'fscca', x)
-}
-
-#' @export
 split_cv <- function(n_rows, k) {
     .Call('fscca_split_cv', PACKAGE = 'fscca', n_rows, k)
-}
-
-#' @export
-ret_list <- function(x) {
-    .Call('fscca_ret_list', PACKAGE = 'fscca', x)
 }
 
 #' @useDynLib fscca
@@ -66,5 +56,10 @@ get_submatrix_mult <- function(X_, which_rows, v) {
 #' @export
 get_submatrix_mult_ptr <- function(X, which_rows, v) {
     .Call('fscca_get_submatrix_mult_ptr', PACKAGE = 'fscca', X, which_rows, v)
+}
+
+#' @export
+practice_arma <- function(x) {
+    .Call('fscca_practice_arma', PACKAGE = 'fscca', x)
 }
 
