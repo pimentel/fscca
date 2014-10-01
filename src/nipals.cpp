@@ -218,17 +218,17 @@ void iterate_sparse_nipals(const arma::mat &Z, arma::vec &coef,
     coef = coef / l2_norm( coef );
 }
 
-double nipals_cor(const arma::vec& u, const arma::vec& v)
+double nipals_cov(const arma::vec& u, const arma::vec& v)
 {
     arma::mat res = arma::trans( u ) * v;
     return res(0, 0) / (u.n_rows - 1);
 }
 
 
-double nipals_cor(const arma::mat& X, const arma::vec& a,
+double nipals_cov(const arma::mat& X, const arma::vec& a,
         const arma::mat& Y, const arma::vec& b)
 {
     arma::vec u = X * a;
     arma::vec v = Y * b;
-    return nipals_cor( u, v );
+    return nipals_cov( u, v );
 }

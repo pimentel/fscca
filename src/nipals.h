@@ -29,9 +29,9 @@ void iterate_sparse_nipals(const arma::mat &Z, arma::vec &coef,
 
 size_t count_zeros(const arma::vec &x);
 
-double nipals_cor(const arma::mat& X, const arma::vec& a,
+double nipals_cov(const arma::mat& X, const arma::vec& a,
         const arma::mat& Y, const arma::vec& b);
-double nipals_cor(const arma::vec& u, const arma::vec& v);
+double nipals_cov(const arma::vec& u, const arma::vec& v);
 
 
 #endif // NIPALS_H

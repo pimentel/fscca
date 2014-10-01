@@ -159,8 +159,6 @@ void cross_validation_alt(const arma::mat& X, const arma::mat& Y,
 
     arma::mat avg_cv_cor( pen_x.size(), pen_y.size(), arma::fill::zeros );
 
-    Rcpp::Rcout << "Random start: " << opt_x << '\t' << lamx[opt_x] << std::endl;
-
     double cur_max = 0.0, prev_max = 0.0;
 
     while (cov > 1e-02 & it < 20)
@@ -178,17 +176,12 @@ void cross_validation_alt(const arma::mat& X, const arma::mat& Y,
                 arma::mat X_t = X.rows( *(test[k]) );
                 arma::mat Y_t = Y.rows( *(test[k]) );
 
-                double tmp = abs(nipals_cor(X_t, a, Y_t, b));
-                Rcpp::Rcout << "x: " << lamx[opt_x] << "\ty: " << lamy[i_y] << "\tcov: " << tmp << std::endl;
-                cur_cv_cor += tmp;
-                /* cur_cv_cor += abs(nipals_cor(X_t, a, Y_t, b)); */
+                cur_cv_cor += abs(nipals_cov(X_t, a, Y_t, b));
             }
             cur_cv_cor /= k_folds;
 
             avg_cv_cor(opt_x, i_y) = cur_cv_cor;
         }
-
-        Rcpp::Rcout << "cov mat:\n" << avg_cv_cor << std::endl;
 
         // gets the index of the optimal y
         avg_cv_cor.row( opt_x ).max( opt_y );
@@ -209,9 +202,7 @@ void cross_validation_alt(const arma::mat& X, const arma::mat& Y,
 
                 arma::mat X_t = X.rows( *(test[k]) );
                 arma::mat Y_t = Y.rows( *(test[k]) );
-                double tmp = abs(nipals_cor(X_t, a, Y_t, b));
-                Rcpp::Rcout << "x: " << lamx[i_x] << "\ty: " << lamy[opt_y] << "\tcov: " << tmp << std::endl;
-                cur_cv_cor += tmp;
+                cur_cv_cor += abs(nipals_cov(X_t, a, Y_t, b));
             }
 
             cur_cv_cor /= k_folds;
@@ -221,15 +212,12 @@ void cross_validation_alt(const arma::mat& X, const arma::mat& Y,
         // should have the optimum x now
         avg_cv_cor.col( opt_y ).max( opt_x );
 
-        Rcpp::Rcout << "cov mat:\n" << avg_cv_cor << std::endl;
-
         cur_max = avg_cv_cor(opt_x, opt_y);
         cov = abs( cur_max - prev_max );
         prev_max = cur_max;
         ++it;
     }
 
-    Rcpp::Rcout << "printing the mat: " << avg_cv_cor << std::endl;
     best_lamx_idx = opt_x;
     best_lamy_idx = opt_y;
     best_avg_cv = avg_cv_cor(opt_x, opt_y);

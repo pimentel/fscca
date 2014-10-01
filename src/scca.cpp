@@ -14,7 +14,11 @@ Rcpp::List fscca(arma::mat& X, arma::mat& Y,
     cross_validation_alt(X, Y, penalty_x, penalty_y, k_folds, lamx, lamy,
             best_x, best_y, best_avg_cv);
 
-    return Rcpp::List::create(Rcpp::Named("lamx", lamx[best_x]),
+    // TODO: once the 'best' have been found, use nipals_sparse to find the
+    // solution
+
+    return Rcpp::List::create(
+            Rcpp::Named("lamx", lamx[best_x]),
             Rcpp::Named("lamy", lamy[best_y]),
             Rcpp::Named("cv_cor", best_avg_cv));
 }
