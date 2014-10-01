@@ -225,8 +225,10 @@ double nipals_cor(const arma::vec& u, const arma::vec& v)
 }
 
 
-double nipals_cor(const arma::mat& X, const arma::mat& Y,
-        const arma::vec& a, const arma::vec& b)
+double nipals_cor(const arma::mat& X, const arma::vec& a,
+        const arma::mat& Y, const arma::vec& b)
 {
-    return nipals_cor( X * a, Y * b );
+    arma::vec u = X * a;
+    arma::vec v = Y * b;
+    return nipals_cor( u, v );
 }

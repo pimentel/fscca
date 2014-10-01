@@ -230,3 +230,20 @@ cv_bench <- microbenchmark(
     withR = groups_to_rows(split_in_groups(51, 5), 5),
     allCpp = split_cv(51, 5),
     times = 1000)
+
+sol11 <- sparse_nipals(X, Y, "lasso", "lasso", 1, 1)
+sol12 <- sparse_nipals(X, Y, "lasso", "lasso", 1, 2)
+sol22 <- sparse_nipals(X, Y, "lasso", "lasso", 2, 2)
+sol21 <- sparse_nipals(X, Y, "lasso", "lasso", 2, 1)
+
+sol <- fscca(X, Y, "lasso", "lasso", 5, 1:3, 1:3)
+c(sol$lamx, sol$lamy)
+
+opt_cv_bench <- microbenchmark(
+    withR = opt.cv.alt(X, Y, 5, 1:3, 1:3, "LASSO", NULL),
+    allCpp = fscca(X, Y, "lasso", "lasso", 5, 1:3, 1:3),
+    times = 1000
+    )
+
+z <- fscca(X, Y, "lasso", "lasso", 5, c(2, 30, 50), c(2, 30, 50))
+z <- fscca(X, Y, "lasso", "lasso", 5, c(0.5, 2, 50), c(0.5, 2, 50))

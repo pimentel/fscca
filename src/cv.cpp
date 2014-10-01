@@ -1,7 +1,5 @@
 #include "cv.h"
 
-typedef std::shared_ptr< arma::uvec > arma_uvec_ptr;
-
 //' @export
 // [[Rcpp::export]]
 arma::uvec split_in_groups(size_t length, size_t k)
@@ -122,13 +120,12 @@ Rcpp::List split_cv(size_t n_rows, size_t k)
 void cross_validation_alt(const arma::mat& X, const arma::mat& Y,
         const std::string& penalty_x, const std::string& penalty_y,
         size_t k_folds,
-        const std::vector<double>& lamx, const std::vector<double>& lamy,
+        const arma::vec& lamx, const arma::vec& lamy,
         unsigned int& best_lamx_idx, unsigned int& best_lamy_idx,
         double& best_avg_cv)
 {
 
     // TODO: add seed for randomness
-    //
     
     // get rows for cross validation
     arma::uvec groups = split_in_groups(X.n_rows, k_folds);
@@ -146,27 +143,23 @@ void cross_validation_alt(const arma::mat& X, const arma::mat& Y,
     // initialize all the penalties
     std::vector< std::shared_ptr<NipalsPenalty> > pen_x;
     std::vector< std::shared_ptr<NipalsPenalty> > pen_y;
-    for (std::vector<double>::const_iterator it = lamx.begin();
-            it != lamx.end();
-            ++it)
-        pen_x.push_back( PenaltyFactory::make_penalty(penalty_x, *it) );
-    for (std::vector<double>::const_iterator it = lamy.begin();
-            it != lamy.end();
-            ++it)
-        pen_y.push_back( PenaltyFactory::make_penalty(penalty_y, *it) );
 
-    // std::vector< std::shared_ptr<NipalsPenalty> >::const_iterator
-    //     cur_pen_x;
-    // std::vector< std::shared_ptr<NipalsPenalty> >::const_iterator
-    //     cur_pen_y;
-    NipalsPenalty* cur_pen_x;
-    NipalsPenalty* cur_pen_y;
+    for (size_t i = 0; i < lamx.n_rows; ++i)
+        pen_x.push_back( PenaltyFactory::make_penalty(penalty_x, lamx[i]) );
+    for (size_t i = 0; i < lamx.n_rows; ++i)
+        pen_y.push_back( PenaltyFactory::make_penalty(penalty_y, lamy[i]) );
+
 
     unsigned int opt_x = std::rand() % pen_x.size();
     unsigned int opt_y = 0;
+
+    NipalsPenalty* cur_pen_x;
+    NipalsPenalty* cur_pen_y;
     cur_pen_x = pen_x[opt_x].get();
 
     arma::mat avg_cv_cor( pen_x.size(), pen_y.size(), arma::fill::zeros );
+
+    Rcpp::Rcout << "Random start: " << opt_x << '\t' << lamx[opt_x] << std::endl;
 
     double cur_max = 0.0, prev_max = 0.0;
 
@@ -181,18 +174,21 @@ void cross_validation_alt(const arma::mat& X, const arma::mat& Y,
                 arma::mat X_ = X.rows( *(fit[k]) );
                 arma::mat Y_ = Y.rows( *(fit[k]) );
                 arma::vec a(X_.n_cols), b(Y_.n_cols), u(X_.n_rows), v(X_.n_rows);
-
-                Rcpp::Rcout << X_ << std::endl;
                 sparse_nipals_(X_, Y_, a, b, u, v, *cur_pen_x, *cur_pen_y);
                 arma::mat X_t = X.rows( *(test[k]) );
                 arma::mat Y_t = Y.rows( *(test[k]) );
-                cur_cv_cor += abs(nipals_cor(X_t, a, Y_t, b));
+
+                double tmp = abs(nipals_cor(X_t, a, Y_t, b));
+                Rcpp::Rcout << "x: " << lamx[opt_x] << "\ty: " << lamy[i_y] << "\tcov: " << tmp << std::endl;
+                cur_cv_cor += tmp;
+                /* cur_cv_cor += abs(nipals_cor(X_t, a, Y_t, b)); */
             }
             cur_cv_cor /= k_folds;
 
             avg_cv_cor(opt_x, i_y) = cur_cv_cor;
         }
 
+        Rcpp::Rcout << "cov mat:\n" << avg_cv_cor << std::endl;
 
         // gets the index of the optimal y
         avg_cv_cor.row( opt_x ).max( opt_y );
@@ -209,12 +205,13 @@ void cross_validation_alt(const arma::mat& X, const arma::mat& Y,
                 arma::mat Y_ = Y.rows( *(fit[k]) );
                 arma::vec a(X_.n_cols), b(Y_.n_cols), u(X_.n_rows), v(X_.n_rows);
 
-                Rcpp::Rcout << X_ << std::endl;
                 sparse_nipals_(X_, Y_, a, b, u, v, *cur_pen_x, *cur_pen_y);
 
                 arma::mat X_t = X.rows( *(test[k]) );
                 arma::mat Y_t = Y.rows( *(test[k]) );
-                cur_cv_cor += abs(nipals_cor(X_t, a, Y_t, b));
+                double tmp = abs(nipals_cor(X_t, a, Y_t, b));
+                Rcpp::Rcout << "x: " << lamx[i_x] << "\ty: " << lamy[opt_y] << "\tcov: " << tmp << std::endl;
+                cur_cv_cor += tmp;
             }
 
             cur_cv_cor /= k_folds;
@@ -224,6 +221,7 @@ void cross_validation_alt(const arma::mat& X, const arma::mat& Y,
         // should have the optimum x now
         avg_cv_cor.col( opt_y ).max( opt_x );
 
+        Rcpp::Rcout << "cov mat:\n" << avg_cv_cor << std::endl;
 
         cur_max = avg_cv_cor(opt_x, opt_y);
         cov = abs( cur_max - prev_max );
@@ -231,6 +229,7 @@ void cross_validation_alt(const arma::mat& X, const arma::mat& Y,
         ++it;
     }
 
+    Rcpp::Rcout << "printing the mat: " << avg_cv_cor << std::endl;
     best_lamx_idx = opt_x;
     best_lamy_idx = opt_y;
     best_avg_cv = avg_cv_cor(opt_x, opt_y);
