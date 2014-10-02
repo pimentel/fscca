@@ -21,7 +21,7 @@ Rcpp::List nipals(const arma::mat& X, const arma::mat& Y)
 
     nipals_(X, Y, a, b, u, v);
 
-    arma::mat rho = arma::trans(u) * v;
+    double rho = nipals_cov(u, v);
 
     Rcpp::List result = Rcpp::List::create(Rcpp::Named("rho") = rho,
             Rcpp::Named("u") = u,
@@ -109,7 +109,7 @@ Rcpp::List sparse_nipals(const arma::mat& X, const arma::mat& Y,
     // nipals will check the dimensions of X_ and Y_
     sparse_nipals_(X, Y, a, b, u, v, *np_x, *np_y);
 
-    arma::vec rho = arma::trans(u) * v;
+    double rho = nipals_cov(u, v);
 
     Rcpp::List result = Rcpp::List::create(Rcpp::Named("rho") = rho,
             Rcpp::Named("u") = u,
@@ -132,6 +132,7 @@ void sparse_nipals_(const arma::mat &X, const arma::mat &Y,
     size_t p = X.n_cols;
     size_t q = Y.n_cols;
     size_t n_iter = 0;
+    const size_t MAX_ITER = 100;
 
     double eps = 1.0;
 
@@ -143,7 +144,7 @@ void sparse_nipals_(const arma::mat &X, const arma::mat &Y,
     size_t b_zeros;
 
     while ( (eps > S_NIPALS_EPS_CONVERGE) &&
-            (n_iter < 100) )
+            (n_iter < MAX_ITER) )
     {
         iterate_sparse_nipals(X, a, u, v, penalty_x);
         u = X * a;
@@ -163,9 +164,9 @@ void sparse_nipals_(const arma::mat &X, const arma::mat &Y,
         ++n_iter;
     }
 
-    if ( n_iter == 100 )
+    if ( n_iter == MAX_ITER )
     {
-        Rcpp::Rcout << "No convergence" << std::endl;
+        Rcpp::Rcout << "No convergence (sparse_nipals)." << std::endl;
     }
 
     a = a / l2_norm( a );

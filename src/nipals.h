@@ -33,5 +33,4 @@ double nipals_cov(const arma::mat& X, const arma::vec& a,
         const arma::mat& Y, const arma::vec& b);
 double nipals_cov(const arma::vec& u, const arma::vec& v);
 
-
 #endif // NIPALS_H

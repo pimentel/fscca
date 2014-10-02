@@ -88,6 +88,7 @@ void cross_validation_alt(const arma::mat& X, const arma::mat& Y,
     groups_to_row_ptr(groups, k_folds, fit, test);
 
     size_t it = 0;
+    const size_t MAX_ITER = 20;
     double eps = 1.0;
 
     // initialize all the penalties
@@ -110,8 +111,9 @@ void cross_validation_alt(const arma::mat& X, const arma::mat& Y,
 
     double cur_max = 0.0, prev_max = 0.0;
 
-    while (eps > 1e-02 & it < 20)
+    while (eps > 1e-4 & it < MAX_ITER)
     {
+        // fix 'opt_x' and find the best y value
         for (size_t i_y = 0; i_y < pen_y.size(); ++i_y)
         {
             cur_pen_y = pen_y[i_y].get();
@@ -137,6 +139,7 @@ void cross_validation_alt(const arma::mat& X, const arma::mat& Y,
 
         cur_pen_y = pen_y[opt_y].get();
 
+        // given the best y value, find the best x
         for (size_t i_x = 0; i_x < pen_x.size(); ++i_x)
         {
             cur_pen_x = pen_x[i_x].get();
@@ -167,10 +170,12 @@ void cross_validation_alt(const arma::mat& X, const arma::mat& Y,
         ++it;
     }
 
-    if (it == 20)
-        Rcpp::Rcout << "No convergence in CV." << std::endl;
+    if (it == MAX_ITER)
+        Rcpp::Rcout << "No convergence (cv alt)." << std::endl;
 
     best_lamx_idx = opt_x;
     best_lamy_idx = opt_y;
     best_avg_cv = avg_cv_cor(opt_x, opt_y);
 }
+
+// TODO: implement grid search
