@@ -22,38 +22,6 @@ BEGIN_RCPP
     return __sexp_result;
 END_RCPP
 }
-// groups_to_rows
-Rcpp::List groups_to_rows(const arma::uvec& x, size_t k);
-RcppExport SEXP fscca_groups_to_rows(SEXP xSEXP, SEXP kSEXP) {
-BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< const arma::uvec& >::type x(xSEXP );
-        Rcpp::traits::input_parameter< size_t >::type k(kSEXP );
-        Rcpp::List __result = groups_to_rows(x, k);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
-END_RCPP
-}
-// split_cv
-Rcpp::List split_cv(size_t n_rows, size_t k);
-RcppExport SEXP fscca_split_cv(SEXP n_rowsSEXP, SEXP kSEXP) {
-BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< size_t >::type n_rows(n_rowsSEXP );
-        Rcpp::traits::input_parameter< size_t >::type k(kSEXP );
-        Rcpp::List __result = split_cv(n_rows, k);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
-END_RCPP
-}
 // nipals
 Rcpp::List nipals(const arma::mat& X, const arma::mat& Y);
 RcppExport SEXP fscca_nipals(SEXP XSEXP, SEXP YSEXP) {

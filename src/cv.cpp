@@ -32,33 +32,6 @@ arma::uvec split_in_groups(size_t length, size_t k)
     return x;
 }
 
-//' @export
-// [[Rcpp::export]]
-Rcpp::List groups_to_rows(const arma::uvec& x, size_t k)
-{
-    Rcpp::List fit, test;
-
-    for (size_t grp = 0; grp < k; ++grp)
-    {
-        Rcpp::NumericVector fit_vec;
-        Rcpp::NumericVector test_vec;
-        for (size_t j = 0; j < x.n_rows; ++j)
-        {
-            if ( x[j] == grp)
-                test_vec.push_back(j);
-            else
-                fit_vec.push_back(j);
-        }
-        fit.push_back( fit_vec );
-        test.push_back( test_vec );
-    }
-
-    return Rcpp::List::create( Rcpp::Named("fit", fit),
-            Rcpp::Named("test", test));
-}
-
-
-
 void groups_to_row_ptr(arma::uvec& x, size_t k,
         std::vector< arma_uvec_ptr >& fit, std::vector< arma_uvec_ptr >& test)
 {
@@ -93,29 +66,6 @@ void groups_to_row_ptr(arma::uvec& x, size_t k,
 
 }
 
-//' @export
-// [[Rcpp::export]]
-Rcpp::List split_cv(size_t n_rows, size_t k)
-{
-    arma::uvec groups = split_in_groups(n_rows, k);
-
-    std::vector< arma_uvec_ptr > fit;
-    std::vector< arma_uvec_ptr > test;
-
-    groups_to_row_ptr(groups, k, fit, test);
-
-    Rcpp::List fit_list;
-    Rcpp::List test_list;
-    for (size_t i = 0; i < fit.size(); ++i)
-        fit_list.push_back( *fit[i] );
-
-    for (size_t i = 0; i < fit.size(); ++i)
-        test_list.push_back( *test[i] );
-
-    return Rcpp::List::create( Rcpp::Named("fit", fit_list),
-            Rcpp::Named("test", test_list));
-}
-
 // This function does the bulk of the CV
 void cross_validation_alt(const arma::mat& X, const arma::mat& Y,
         const std::string& penalty_x, const std::string& penalty_y,
@@ -148,7 +98,6 @@ void cross_validation_alt(const arma::mat& X, const arma::mat& Y,
         pen_x.push_back( PenaltyFactory::make_penalty(penalty_x, lamx[i]) );
     for (size_t i = 0; i < lamx.n_rows; ++i)
         pen_y.push_back( PenaltyFactory::make_penalty(penalty_y, lamy[i]) );
-
 
     unsigned int opt_x = std::rand() % pen_x.size();
     unsigned int opt_y = 0;
