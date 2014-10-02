@@ -88,7 +88,7 @@ void cross_validation_alt(const arma::mat& X, const arma::mat& Y,
     groups_to_row_ptr(groups, k_folds, fit, test);
 
     size_t it = 0;
-    double cov = 1.0;
+    double eps = 1.0;
 
     // initialize all the penalties
     std::vector< std::shared_ptr<NipalsPenalty> > pen_x;
@@ -110,7 +110,7 @@ void cross_validation_alt(const arma::mat& X, const arma::mat& Y,
 
     double cur_max = 0.0, prev_max = 0.0;
 
-    while (cov > 1e-02 & it < 20)
+    while (eps > 1e-02 & it < 20)
     {
         for (size_t i_y = 0; i_y < pen_y.size(); ++i_y)
         {
@@ -162,7 +162,7 @@ void cross_validation_alt(const arma::mat& X, const arma::mat& Y,
         avg_cv_cor.col( opt_y ).max( opt_x );
 
         cur_max = avg_cv_cor(opt_x, opt_y);
-        cov = abs( cur_max - prev_max );
+        eps = abs( cur_max - prev_max );
         prev_max = cur_max;
         ++it;
     }
