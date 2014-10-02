@@ -167,6 +167,9 @@ void cross_validation_alt(const arma::mat& X, const arma::mat& Y,
         ++it;
     }
 
+    if (it == 20)
+        Rcpp::Rcout << "No convergence in CV." << std::endl;
+
     best_lamx_idx = opt_x;
     best_lamy_idx = opt_y;
     best_avg_cv = avg_cv_cor(opt_x, opt_y);

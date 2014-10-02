@@ -34,12 +34,12 @@ sparse_nipals <- function(X, Y, penalty_x, penalty_y, lamx, lamy) {
 }
 
 #' @export
-fscca <- function(X, Y, penalty_x, penalty_y, k_folds, lamx, lamy) {
-    .Call('fscca_fscca', PACKAGE = 'fscca', X, Y, penalty_x, penalty_y, k_folds, lamx, lamy)
+zero_mat <- function(X) {
+    .Call('fscca_zero_mat', PACKAGE = 'fscca', X)
 }
 
 #' @export
-zero_mat <- function(X) {
-    .Call('fscca_zero_mat', PACKAGE = 'fscca', X)
+fscca <- function(X, Y, penalty_x, penalty_y, k_folds, lamx, lamy) {
+    .Call('fscca_fscca', PACKAGE = 'fscca', X, Y, penalty_x, penalty_y, k_folds, lamx, lamy)
 }
 
