@@ -16,4 +16,6 @@ double l2_norm_sq(const arma::vec &x);
 
 double l2_norm(const arma::vec &x);
 
+void scale_in_place(arma::mat& X, bool center, bool scale);
+
 #endif // FSCCA_FWD_H

@@ -1,6 +1,5 @@
 #include "penalties.h"
 
-
 LassoPenalty::LassoPenalty(double lam) :
     lambda_(lam)
 {

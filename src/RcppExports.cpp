@@ -74,8 +74,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // fscca
-Rcpp::List fscca(arma::mat& X, arma::mat& Y, const std::string& penalty_x, const std::string& penalty_y, size_t k_folds, const arma::vec& lamx, const arma::vec& lamy);
-RcppExport SEXP fscca_fscca(SEXP XSEXP, SEXP YSEXP, SEXP penalty_xSEXP, SEXP penalty_ySEXP, SEXP k_foldsSEXP, SEXP lamxSEXP, SEXP lamySEXP) {
+Rcpp::List fscca(arma::mat& X, arma::mat& Y, const std::string& penalty_x, const std::string& penalty_y, const arma::vec& lamx, const arma::vec& lamy, size_t k_folds = 5, size_t n_components = 1, bool center = true, bool scale = false);
+RcppExport SEXP fscca_fscca(SEXP XSEXP, SEXP YSEXP, SEXP penalty_xSEXP, SEXP penalty_ySEXP, SEXP lamxSEXP, SEXP lamySEXP, SEXP k_foldsSEXP, SEXP n_componentsSEXP, SEXP centerSEXP, SEXP scaleSEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
     {
@@ -84,10 +84,13 @@ BEGIN_RCPP
         Rcpp::traits::input_parameter< arma::mat& >::type Y(YSEXP );
         Rcpp::traits::input_parameter< const std::string& >::type penalty_x(penalty_xSEXP );
         Rcpp::traits::input_parameter< const std::string& >::type penalty_y(penalty_ySEXP );
-        Rcpp::traits::input_parameter< size_t >::type k_folds(k_foldsSEXP );
         Rcpp::traits::input_parameter< const arma::vec& >::type lamx(lamxSEXP );
         Rcpp::traits::input_parameter< const arma::vec& >::type lamy(lamySEXP );
-        Rcpp::List __result = fscca(X, Y, penalty_x, penalty_y, k_folds, lamx, lamy);
+        Rcpp::traits::input_parameter< size_t >::type k_folds(k_foldsSEXP );
+        Rcpp::traits::input_parameter< size_t >::type n_components(n_componentsSEXP );
+        Rcpp::traits::input_parameter< bool >::type center(centerSEXP );
+        Rcpp::traits::input_parameter< bool >::type scale(scaleSEXP );
+        Rcpp::List __result = fscca(X, Y, penalty_x, penalty_y, lamx, lamy, k_folds, n_components, center, scale);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
     UNPROTECT(1);

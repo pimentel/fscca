@@ -39,7 +39,7 @@ zero_mat <- function(X) {
 }
 
 #' @export
-fscca <- function(X, Y, penalty_x, penalty_y, k_folds, lamx, lamy) {
-    .Call('fscca_fscca', PACKAGE = 'fscca', X, Y, penalty_x, penalty_y, k_folds, lamx, lamy)
+fscca <- function(X, Y, penalty_x, penalty_y, lamx, lamy, k_folds = 5L, n_components = 1L, center = TRUE, scale = FALSE) {
+    .Call('fscca_fscca', PACKAGE = 'fscca', X, Y, penalty_x, penalty_y, lamx, lamy, k_folds, n_components, center, scale)
 }
 
