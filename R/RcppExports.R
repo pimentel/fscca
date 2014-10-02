@@ -38,8 +38,36 @@ zero_mat <- function(X) {
     .Call('fscca_zero_mat', PACKAGE = 'fscca', X)
 }
 
+#' Fast sparse canonical correlation
+#'
+#' This is a fast implementation of sparse canonical correlation analysis.
+#'
+#' @param X a matrix of dimension n x p
+#' @param Y a matrix of dimension n x q
+#' @param penalty_x a string indicating the penalty function to use on matrix
+#' X. Currently only "lasso" is implemented.
+#' @param penalty_y a string indicating the penalty function to use on matrix
+#' Y. Currently only "lasso" is implemented.
+#' @param lam_x a numeric vector of tuning parameters on X
+#' @param lam_y a numeric vector of tuning parameters on Y
+#' @param k_folds an integer denoting the number of folds to use in cros-validation
+#' @param n_components the number of components to compute
+#' @param center center the columns to mean zero?
+#' @param scale scale the columns to standard deviation one?
+#' @return A list with matrices:
+#' \describe{
+#'     \item{A}{ A matrix of dimension p x n_components of the canonical
+#' vector }
+#'     \item{B}{ A matrix of dimension q x n_components of the canonical
+#' vector }
+#'     \item{U}{ A matrix of dimension n x n_components of the X * a }
+#'     \item{V}{ A matrix of dimension n x n_components of the Y * b }
+#'     \item{lambda}{ A matrix of dimension n_components x n of the optimal
+#' tuning parameters}
+#'     \item{covar}{ The average cross-validated covariance }
+#' }
 #' @export
-fscca <- function(X, Y, penalty_x, penalty_y, lamx, lamy, k_folds = 5L, n_components = 1L, center = TRUE, scale = FALSE) {
-    .Call('fscca_fscca', PACKAGE = 'fscca', X, Y, penalty_x, penalty_y, lamx, lamy, k_folds, n_components, center, scale)
+fscca <- function(X, Y, penalty_x, penalty_y, lam_x, lam_y, k_folds = 5L, n_components = 1L, center = TRUE, scale = FALSE) {
+    .Call('fscca_fscca', PACKAGE = 'fscca', X, Y, penalty_x, penalty_y, lam_x, lam_y, k_folds, n_components, center, scale)
 }
 

@@ -255,5 +255,11 @@ wR <- opt.cv.alt(X, Y, 5, 1:3, 1:3, "LASSO", NULL); wR
 
 z <- fscca(X, Y, "lasso", "lasso", 5, 1:3, 1:3)
 
-z <- fscca(X, Y, "lasso", "lasso", 5, c(2, 30, 50), c(2, 30, 50))
-z <- fscca(X, Y, "lasso", "lasso", 5, c(0.5, 2, 50), c(0.5, 2, 50))
+z <- fscca(X, Y, "lasso", "lasso", c(2, 30, 50), c(2, 30, 50))
+
+
+scca_bench <- microbenchmark(
+    withR = scca(X, Y, "LASSO", 1:3, 1:3),
+    allCpp = fscca(X, Y, "lasso", "lasso", 1:3, 1:3),
+    times = 200
+    )
