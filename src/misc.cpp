@@ -49,14 +49,14 @@ void scale_in_place(arma::mat& X, bool center, bool scale)
     }
 }
 
-void round_inplace(arma::mat& x, short precision)
+void round_in_place(arma::mat& x, short precision)
 {
     for (size_t i = 0; i < x.n_rows; ++i)
         for (size_t j = 0; j < x.n_cols; ++j)
             x(i, j) = d_round(x(i, j), precision);
 }
 
-void round_inplace(arma::vec& x, short precision)
+void round_in_place(arma::vec& x, short precision)
 {
     for (size_t i = 0; i < x.n_rows; ++i)
         x(i) = d_round(x(i), precision);

@@ -69,8 +69,8 @@ void nipals_(const arma::mat &X, const arma::mat &Y,
         eps = arma::max(abs(v - v_prev));
     }
 
-    round_inplace(a, 4);
-    round_inplace(b, 4);
+    round_in_place(a, 4);
+    round_in_place(b, 4);
 }
 
 size_t count_zeros(const arma::vec &x)
@@ -179,8 +179,8 @@ void sparse_nipals_(const arma::mat &X, const arma::mat &Y,
     u = X * a;
     v = Y * b;
 
-    round_inplace(a, 4);
-    round_inplace(b, 4);
+    round_in_place(a, 4);
+    round_in_place(b, 4);
 }
 
 

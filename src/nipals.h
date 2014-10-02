@@ -5,6 +5,7 @@
 
 #include <RcppArmadillo.h>
 
+#include "fwd.h"
 #include "penalties.h"
 
 Rcpp::List nipals(const arma::mat &X, const arma::mat &Y);
