@@ -113,6 +113,7 @@ Rcpp::List fscca(arma::mat X, arma::mat Y,
 
     }
 
+    // TODO: fast round
     Rcpp::Environment base("package:base");
     Rcpp::Function round = base["round"];
 

@@ -169,6 +169,7 @@ void sparse_nipals_(const arma::mat &X, const arma::mat &Y,
         Rcpp::Rcout << "No convergence (sparse_nipals)." << std::endl;
     }
 
+    // TODO: fast round
     a = a / l2_norm( a );
     b = b / l2_norm( b );
 
