@@ -79,65 +79,15 @@ BEGIN_RCPP
     return __sexp_result;
 END_RCPP
 }
-// get_submatrix
-arma::mat get_submatrix(const arma::mat& X_, const arma::uvec& which_rows);
-RcppExport SEXP fscca_get_submatrix(SEXP X_SEXP, SEXP which_rowsSEXP) {
+// zero_mat
+arma::vec zero_mat(arma::mat& X);
+RcppExport SEXP fscca_zero_mat(SEXP XSEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
     {
         Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< const arma::mat& >::type X_(X_SEXP );
-        Rcpp::traits::input_parameter< const arma::uvec& >::type which_rows(which_rowsSEXP );
-        arma::mat __result = get_submatrix(X_, which_rows);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
-END_RCPP
-}
-// get_submatrix_mult
-arma::vec get_submatrix_mult(const arma::mat& X_, const arma::uvec& which_rows, const arma::vec& v);
-RcppExport SEXP fscca_get_submatrix_mult(SEXP X_SEXP, SEXP which_rowsSEXP, SEXP vSEXP) {
-BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< const arma::mat& >::type X_(X_SEXP );
-        Rcpp::traits::input_parameter< const arma::uvec& >::type which_rows(which_rowsSEXP );
-        Rcpp::traits::input_parameter< const arma::vec& >::type v(vSEXP );
-        arma::vec __result = get_submatrix_mult(X_, which_rows, v);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
-END_RCPP
-}
-// get_submatrix_mult_ptr
-arma::vec get_submatrix_mult_ptr(const arma::mat& X, const arma::uvec& which_rows, const arma::vec& v);
-RcppExport SEXP fscca_get_submatrix_mult_ptr(SEXP XSEXP, SEXP which_rowsSEXP, SEXP vSEXP) {
-BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< const arma::mat& >::type X(XSEXP );
-        Rcpp::traits::input_parameter< const arma::uvec& >::type which_rows(which_rowsSEXP );
-        Rcpp::traits::input_parameter< const arma::vec& >::type v(vSEXP );
-        arma::vec __result = get_submatrix_mult_ptr(X, which_rows, v);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
-END_RCPP
-}
-// practice_arma
-Rcpp::NumericVector practice_arma(arma::vec& x);
-RcppExport SEXP fscca_practice_arma(SEXP xSEXP) {
-BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< arma::vec& >::type x(xSEXP );
-        Rcpp::NumericVector __result = practice_arma(x);
+        Rcpp::traits::input_parameter< arma::mat& >::type X(XSEXP );
+        arma::vec __result = zero_mat(X);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
     UNPROTECT(1);

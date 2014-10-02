@@ -39,22 +39,7 @@ fscca <- function(X, Y, penalty_x, penalty_y, k_folds, lamx, lamy) {
 }
 
 #' @export
-get_submatrix <- function(X_, which_rows) {
-    .Call('fscca_get_submatrix', PACKAGE = 'fscca', X_, which_rows)
-}
-
-#' @export
-get_submatrix_mult <- function(X_, which_rows, v) {
-    .Call('fscca_get_submatrix_mult', PACKAGE = 'fscca', X_, which_rows, v)
-}
-
-#' @export
-get_submatrix_mult_ptr <- function(X, which_rows, v) {
-    .Call('fscca_get_submatrix_mult_ptr', PACKAGE = 'fscca', X, which_rows, v)
-}
-
-#' @export
-practice_arma <- function(x) {
-    .Call('fscca_practice_arma', PACKAGE = 'fscca', x)
+zero_mat <- function(X) {
+    .Call('fscca_zero_mat', PACKAGE = 'fscca', X)
 }
 
