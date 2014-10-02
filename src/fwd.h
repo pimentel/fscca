@@ -18,4 +18,9 @@ double l2_norm(const arma::vec &x);
 
 void scale_in_place(arma::mat& X, bool center, bool scale);
 
+void round_inplace(arma::vec& x, short precision);
+void round_inplace(arma::mat& x, short precision);
+double d_round(double value, short precision);
+
+
 #endif // FSCCA_FWD_H

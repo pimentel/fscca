@@ -256,6 +256,7 @@ wR <- opt.cv.alt(X, Y, 5, 1:3, 1:3, "LASSO", NULL); wR
 z <- fscca(X, Y, "lasso", "lasso", 5, 1:3, 1:3)
 
 z <- fscca(X, Y, "lasso", "lasso", c(2, 30, 50), c(2, 30, 50))
+z2 <- NIPALS.sparse(X, Y, 2, 2, "LASSO")
 
 
 scca_bench <- microbenchmark(
@@ -269,4 +270,10 @@ scca_bench_round <- microbenchmark(
     withR = scca(X, Y, "LASSO", 1:3, 1:3),
     allCpp = fscca(X, Y, "lasso", "lasso", 1:3, 1:3),
     times = 200
+    )
+
+round_test <- microbenchmark(
+    round_loop = d_round_inplace(rep(0.5555555, 15000), 4),
+    round_r = round(rep(0.5555555, 15000), 4),
+    times = 1000
     )
