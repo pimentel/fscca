@@ -8,7 +8,7 @@ This is a port of NIPALS SCCA package written by Lee et. al.
 (scca). It is written for speedup in Rcpp.
 
 Currently, only the lasso penalty function is implemented. Also, the only
-cross-validation method implemented is the sequencing one-dimensional search
+cross-validation method implemented is the sequential one-dimensional search
 described in the paper.
 
 # TODOs
