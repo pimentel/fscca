@@ -113,11 +113,14 @@ Rcpp::List fscca(arma::mat X, arma::mat Y,
 
     }
 
+    Rcpp::Environment base("package:base");
+    Rcpp::Function round = base["round"];
+
     return Rcpp::List::create(
-            Rcpp::Named("A", A),
-            Rcpp::Named("B", B),
-            Rcpp::Named("U", U),
-            Rcpp::Named("V", V),
+            Rcpp::Named("A", round(A, 4)),
+            Rcpp::Named("B", round(B, 4)),
+            Rcpp::Named("U", round(U, 4)),
+            Rcpp::Named("V", round(V, 4)),
             Rcpp::Named("lambda", L),
             Rcpp::Named("covar", cov)
             );

@@ -263,3 +263,10 @@ scca_bench <- microbenchmark(
     allCpp = fscca(X, Y, "lasso", "lasso", 1:3, 1:3),
     times = 200
     )
+
+
+scca_bench_round <- microbenchmark(
+    withR = scca(X, Y, "LASSO", 1:3, 1:3),
+    allCpp = fscca(X, Y, "lasso", "lasso", 1:3, 1:3),
+    times = 200
+    )
