@@ -127,7 +127,7 @@ void cross_validation_alt(const arma::mat& X, const arma::mat& Y,
                 arma::mat X_t = X.rows( *(test[k]) );
                 arma::mat Y_t = Y.rows( *(test[k]) );
 
-                cur_cv_cor += abs(nipals_cov(X_t, a, Y_t, b));
+                cur_cv_cor += fabs(nipals_cov(X_t, a, Y_t, b));
             }
             cur_cv_cor /= k_folds;
 
@@ -154,7 +154,7 @@ void cross_validation_alt(const arma::mat& X, const arma::mat& Y,
 
                 arma::mat X_t = X.rows( *(test[k]) );
                 arma::mat Y_t = Y.rows( *(test[k]) );
-                cur_cv_cor += abs(nipals_cov(X_t, a, Y_t, b));
+                cur_cv_cor += fabs(nipals_cov(X_t, a, Y_t, b));
             }
 
             cur_cv_cor /= k_folds;
@@ -165,13 +165,14 @@ void cross_validation_alt(const arma::mat& X, const arma::mat& Y,
         avg_cv_cor.col( opt_y ).max( opt_x );
 
         cur_max = avg_cv_cor(opt_x, opt_y);
-        eps = abs( cur_max - prev_max );
+        eps = fabs( cur_max - prev_max );
         prev_max = cur_max;
         ++it;
     }
 
     if (it == MAX_ITER)
         Rcpp::Rcout << "No convergence (cv alt)." << std::endl;
+
 
     best_lamx_idx = opt_x;
     best_lamy_idx = opt_y;

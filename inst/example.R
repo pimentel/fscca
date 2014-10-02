@@ -242,8 +242,18 @@ c(sol$lamx, sol$lamy)
 opt_cv_bench <- microbenchmark(
     withR = opt.cv.alt(X, Y, 5, 1:3, 1:3, "LASSO", NULL),
     allCpp = fscca(X, Y, "lasso", "lasso", 5, 1:3, 1:3),
-    times = 1000
+    times = 500
     )
+
+ggplot(opt_cv_bench, aes(factor(expr), time, group = factor(expr))) +
+    geom_point(aes(color = factor(expr))) +
+    geom_jitter(aes(color = factor(expr)))
+
+wR <- opt.cv.alt(X, Y, 5, c(0.5, 2, 50), c(0.5, 2, 50), "LASSO", NULL)
+
+wR <- opt.cv.alt(X, Y, 5, 1:3, 1:3, "LASSO", NULL); wR
+
+z <- fscca(X, Y, "lasso", "lasso", 5, 1:3, 1:3)
 
 z <- fscca(X, Y, "lasso", "lasso", 5, c(2, 30, 50), c(2, 30, 50))
 z <- fscca(X, Y, "lasso", "lasso", 5, c(0.5, 2, 50), c(0.5, 2, 50))
