@@ -95,10 +95,10 @@ void cross_validation_alt(const arma::mat& X, const arma::mat& Y,
     std::vector< std::unique_ptr<NipalsPenalty> > pen_x;
     std::vector< std::unique_ptr<NipalsPenalty> > pen_y;
 
-    for (size_t i = 0; i < lamx.n_rows; ++i)
-        pen_x.push_back( std::move(PenaltyFactory::make_penalty(penalty_x, lamx[i])) );
-    for (size_t i = 0; i < lamx.n_rows; ++i)
-        pen_y.push_back( std::move(PenaltyFactory::make_penalty(penalty_y, lamy[i])) );
+    for (auto& lam : lamx)
+        pen_x.push_back( std::move(PenaltyFactory::make_penalty(penalty_x, lam)) );
+    for (auto& lam : lamx)
+        pen_y.push_back( std::move(PenaltyFactory::make_penalty(penalty_y, lam)) );
 
     unsigned int opt_x = std::rand() % pen_x.size();
     unsigned int opt_y = 0;
