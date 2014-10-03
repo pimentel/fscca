@@ -27,6 +27,10 @@ You can install the current development version from github using `devtools`:
 install_github("pimentel/fast-scca")
 ```
 
+The build sets the flag `PKG_CXXFLAGS = "-std=c++11"` in `src/Makevars`. This
+is standard for `g++` and `clang`. If this fails on your computer, let me know
+(my guess it will likely fail on windows).
+
 The branch `master` should always be stable. Please file a bug report if it is
 unstable.
 
