@@ -27,6 +27,9 @@ You can install the current development version from github using `devtools`:
 install_github("pimentel/fast-scca")
 ```
 
+The branch `master` should always be stable. Please file a bug report if it is
+unstable.
+
 Assuming all goes well, load it like a usual package:
 
 ```R
