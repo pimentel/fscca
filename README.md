@@ -11,6 +11,38 @@ Currently, only the lasso penalty function is implemented. Also, the only
 cross-validation method implemented is the sequential one-dimensional search
 described in the paper.
 
+# Installation
+
+Make sure you have the `devtools` package installed as well as `Rcpp` and
+`RcppArmadillo`:
+
+```R
+install.packages(c("devtools", "Rcpp", "RcppArmadillo"))
+library(devtools)
+```
+
+You can install the current development version from github using `devtools`:
+
+```R
+install_github("pimentel/fast-scca")
+```
+
+Assuming all goes well, load it like a usual package:
+
+```R
+library(fscca)
+```
+
+# Usage
+
+The main `R` entry point is the function `fscca()`. It is reasonably well
+documented in `R` which you can access by typing `?fscca` or `help('fscca')`.
+This function will automatically perform cross-validation as well as compute
+multiple components (default is just the first).
+
+If you don't want to perform cross-validation, you can compute the first
+canonical vectors by using `nipals_sparse()` which is also documented in `R`.
+
 # TODOs
 
 * Implement other penalty functions (soft-thresholding, SCAD, HL)
