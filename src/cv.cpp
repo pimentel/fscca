@@ -60,8 +60,8 @@ void groups_to_row_ptr(arma::uvec& x, size_t k,
                 ++fit_count;
             }
         }
-        fit.push_back( fit_vec );
-        test.push_back( test_vec );
+        fit.push_back( std::move(fit_vec) );
+        test.push_back( std::move(test_vec) );
     }
 
 }
@@ -92,13 +92,13 @@ void cross_validation_alt(const arma::mat& X, const arma::mat& Y,
     double eps = 1.0;
 
     // initialize all the penalties
-    std::vector< std::shared_ptr<NipalsPenalty> > pen_x;
-    std::vector< std::shared_ptr<NipalsPenalty> > pen_y;
+    std::vector< std::unique_ptr<NipalsPenalty> > pen_x;
+    std::vector< std::unique_ptr<NipalsPenalty> > pen_y;
 
     for (size_t i = 0; i < lamx.n_rows; ++i)
-        pen_x.push_back( PenaltyFactory::make_penalty(penalty_x, lamx[i]) );
+        pen_x.push_back( std::move(PenaltyFactory::make_penalty(penalty_x, lamx[i])) );
     for (size_t i = 0; i < lamx.n_rows; ++i)
-        pen_y.push_back( PenaltyFactory::make_penalty(penalty_y, lamy[i]) );
+        pen_y.push_back( std::move(PenaltyFactory::make_penalty(penalty_y, lamy[i])) );
 
     unsigned int opt_x = std::rand() % pen_x.size();
     unsigned int opt_y = 0;

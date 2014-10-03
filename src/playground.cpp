@@ -1,6 +1,6 @@
 #include <RcppArmadillo.h>
 
-typedef std::shared_ptr< arma::uvec > arma_uvec_ptr;
+typedef std::unique_ptr< arma::uvec > arma_uvec_ptr;
 
 //' @export
 // [[Rcpp::export]]

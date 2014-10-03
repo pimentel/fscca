@@ -10,7 +10,7 @@
 #include "nipals.h"
 #include "penalties.h"
 
-typedef std::shared_ptr< arma::uvec > arma_uvec_ptr;
+typedef std::unique_ptr< arma::uvec > arma_uvec_ptr;
 
 void groups_to_row_ptr(arma::uvec& x, size_t k,
         std::vector< arma_uvec_ptr >& fit, std::vector< arma_uvec_ptr >& test);

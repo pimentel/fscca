@@ -3,6 +3,9 @@
 
 #include <RcppArmadillo.h>
 
+// [[Rcpp::plugins(cpp11)]]
+
+
 #define NIPALS_EPS_CONVERGE 1e-6
 #define S_NIPALS_EPS_CONVERGE 1e-3
 
