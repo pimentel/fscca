@@ -1,10 +1,11 @@
 #ifndef FSCCA_FWD_H
 #define FSCCA_FWD_H
 
+#include <memory>
+
 #include <RcppArmadillo.h>
 
 // [[Rcpp::plugins(cpp11)]]
-
 
 #define NIPALS_EPS_CONVERGE 1e-6
 #define S_NIPALS_EPS_CONVERGE 1e-3
@@ -24,6 +25,5 @@ void scale_in_place(arma::mat& X, bool center, bool scale);
 void round_in_place(arma::vec& x, short precision);
 void round_in_place(arma::mat& x, short precision);
 double d_round(double value, short precision);
-
 
 #endif // FSCCA_FWD_H

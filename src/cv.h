@@ -1,13 +1,14 @@
 #ifndef CV_H
 #define CV_H
 
+#include "fwd.h"
+
 #include <cstdlib>
 #include <iostream>
 #include <vector>
 
 #include <RcppArmadillo.h>
 
-#include "fwd.h"
 #include "nipals.h"
 #include "penalties.h"
 

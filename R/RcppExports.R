@@ -33,11 +33,6 @@ sparse_nipals <- function(X, Y, penalty_x, penalty_y, lamx, lamy) {
     .Call('fscca_sparse_nipals', PACKAGE = 'fscca', X, Y, penalty_x, penalty_y, lamx, lamy)
 }
 
-#' @export
-zero_mat <- function(X) {
-    .Call('fscca_zero_mat', PACKAGE = 'fscca', X)
-}
-
 #' Fast sparse canonical correlation
 #'
 #' This is a fast implementation of sparse canonical correlation analysis.
