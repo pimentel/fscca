@@ -7,6 +7,7 @@
 
 #include <RcppArmadillo.h>
 
+#include "fwd.h"
 #include "nipals.h"
 #include "penalties.h"
 

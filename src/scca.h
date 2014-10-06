@@ -3,6 +3,8 @@
 
 #include <RcppArmadillo.h>
 
+#include "fwd.h"
+
 #include "cv.h"
 #include "nipals.h"
 #include "penalties.h"
