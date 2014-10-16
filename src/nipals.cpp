@@ -1,6 +1,7 @@
 #include "nipals.h"
 
 //' @useDynLib fscca
+//' @importFrom Rcpp evalCpp
 
 // [[Rcpp::depends(RcppArmadillo)]]
 

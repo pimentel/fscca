@@ -7,6 +7,7 @@ split_in_groups <- function(length, k) {
 }
 
 #' @useDynLib fscca
+#' @importFrom Rcpp evalCpp
 NULL
 
 #' NIPALS CCA algorithm

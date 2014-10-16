@@ -24,7 +24,7 @@ library(devtools)
 You can install the current development version from github using `devtools`:
 
 ```R
-install_github("pimentel/fast-scca")
+install_github("pimentel/fscca")
 ```
 
 The build sets the flag `PKG_CXXFLAGS = "-std=c++11"` in `src/Makevars`. This
