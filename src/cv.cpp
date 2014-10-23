@@ -97,7 +97,7 @@ void cross_validation_alt(const arma::mat& X, const arma::mat& Y,
 
     for (auto& lam : lamx)
         pen_x.push_back( std::move(PenaltyFactory::make_penalty(penalty_x, lam)) );
-    for (auto& lam : lamx)
+    for (auto& lam : lamy)
         pen_y.push_back( std::move(PenaltyFactory::make_penalty(penalty_y, lam)) );
 
     unsigned int opt_x = std::rand() % pen_x.size();
