@@ -76,16 +76,22 @@ void cross_validation_alt(const arma::mat& X, const arma::mat& Y,
 {
 
     // TODO: add seed for randomness
-    
+
     // get rows for cross validation
     arma::uvec groups = split_in_groups(X.n_rows, k_folds);
-    
+
     std::vector< arma_uvec_ptr > fit;
     std::vector< arma_uvec_ptr > test;
-    
+
     // fit and test now contain k_folds arma_uvec_ptrs of rows for fit and test
     // set for each k
     groups_to_row_ptr(groups, k_folds, fit, test);
+
+    for (size_t k = 0; k < k_folds; ++k)
+    {
+        if ((test[k])->n_elem < 2)
+            Rcpp::stop("A group in cross-validation has less than two samples. This will result in division by zero. Consider using a smaller 'k' in the cross-validation.\n");
+    }
 
     size_t it = 0;
     const size_t MAX_ITER = 20;
@@ -101,7 +107,9 @@ void cross_validation_alt(const arma::mat& X, const arma::mat& Y,
         pen_y.push_back( std::move(PenaltyFactory::make_penalty(penalty_y, lam)) );
 
     unsigned int opt_x = std::rand() % pen_x.size();
+    /* arma::uword opt_x = std::rand() % pen_x.size(); */
     unsigned int opt_y = 0;
+    /* arma::uword opt_y = 0; */
 
     NipalsPenalty* cur_pen_x;
     NipalsPenalty* cur_pen_y;

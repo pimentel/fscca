@@ -1,6 +1,10 @@
 #ifndef FSCCA_FWD_H
 #define FSCCA_FWD_H
 
+// #if !defined(ARMA_64BIT_WORD)
+//   #define ARMA_64BIT_WORD
+// #endif
+
 #include <memory>
 
 #include <RcppArmadillo.h>

@@ -229,6 +229,8 @@ void iterate_sparse_nipals(const arma::mat &Z, arma::vec &coef,
 double nipals_cov(const arma::vec& u, const arma::vec& v)
 {
     arma::mat res = arma::trans( u ) * v;
+    if (u.n_rows == 1)
+        Rcpp::Rcerr << "Warning: need more samples (otherwise, divide by zero in covariance)" << std::endl;
     return res(0, 0) / (u.n_rows - 1);
 }
 
