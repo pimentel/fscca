@@ -37,12 +37,15 @@ void groups_to_row_ptr(arma::uvec& x, size_t k,
 {
 
     std::unique_ptr<size_t[]> groups( new size_t[ k ] );
+    for (size_t i = 0; i < k; ++i) {
+      groups[i] = 0;
+    }
 
-    for (size_t i = 0; i < x.n_rows; ++i)
+    for (size_t i = 0; i < x.n_rows; ++i) {
         ++groups[ x[i] ];
+    }
 
-    for (size_t grp = 0; grp < k; ++grp)
-    {
+    for (size_t grp = 0; grp < k; ++grp) {
         arma_uvec_ptr fit_vec( new arma::uvec( x.n_rows - groups[grp] ) );
         arma_uvec_ptr test_vec( new arma::uvec( groups[grp] ) );
         size_t fit_count = 0;
@@ -86,6 +89,10 @@ void cross_validation_alt(const arma::mat& X, const arma::mat& Y,
     // fit and test now contain k_folds arma_uvec_ptrs of rows for fit and test
     // set for each k
     groups_to_row_ptr(groups, k_folds, fit, test);
+
+    // for (size_t k = 0; k < k_folds; ++k) {
+    //   Rcpp::Rcout << "fit[k]\t" << fit[k]->n_elem << std::endl;
+    // }
 
     for (size_t k = 0; k < k_folds; ++k)
     {
@@ -178,9 +185,9 @@ void cross_validation_alt(const arma::mat& X, const arma::mat& Y,
         ++it;
     }
 
-    if (it == MAX_ITER)
+    if (it == MAX_ITER) {
         Rcpp::Rcout << "No convergence (cv alt)." << std::endl;
-
+    }
 
     best_lamx_idx = opt_x;
     best_lamy_idx = opt_y;
