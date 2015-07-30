@@ -10,75 +10,59 @@ using namespace Rcpp;
 arma::uvec split_in_groups(size_t length, size_t k);
 RcppExport SEXP fscca_split_in_groups(SEXP lengthSEXP, SEXP kSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< size_t >::type length(lengthSEXP );
-        Rcpp::traits::input_parameter< size_t >::type k(kSEXP );
-        arma::uvec __result = split_in_groups(length, k);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< size_t >::type length(lengthSEXP);
+    Rcpp::traits::input_parameter< size_t >::type k(kSEXP);
+    __result = Rcpp::wrap(split_in_groups(length, k));
+    return __result;
 END_RCPP
 }
 // nipals
 Rcpp::List nipals(const arma::mat& X, const arma::mat& Y);
 RcppExport SEXP fscca_nipals(SEXP XSEXP, SEXP YSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< const arma::mat& >::type X(XSEXP );
-        Rcpp::traits::input_parameter< const arma::mat& >::type Y(YSEXP );
-        Rcpp::List __result = nipals(X, Y);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< const arma::mat& >::type X(XSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type Y(YSEXP);
+    __result = Rcpp::wrap(nipals(X, Y));
+    return __result;
 END_RCPP
 }
 // sparse_nipals
 Rcpp::List sparse_nipals(const arma::mat& X, const arma::mat& Y, const std::string& penalty_x, const std::string& penalty_y, double lamx, double lamy);
 RcppExport SEXP fscca_sparse_nipals(SEXP XSEXP, SEXP YSEXP, SEXP penalty_xSEXP, SEXP penalty_ySEXP, SEXP lamxSEXP, SEXP lamySEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< const arma::mat& >::type X(XSEXP );
-        Rcpp::traits::input_parameter< const arma::mat& >::type Y(YSEXP );
-        Rcpp::traits::input_parameter< const std::string& >::type penalty_x(penalty_xSEXP );
-        Rcpp::traits::input_parameter< const std::string& >::type penalty_y(penalty_ySEXP );
-        Rcpp::traits::input_parameter< double >::type lamx(lamxSEXP );
-        Rcpp::traits::input_parameter< double >::type lamy(lamySEXP );
-        Rcpp::List __result = sparse_nipals(X, Y, penalty_x, penalty_y, lamx, lamy);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< const arma::mat& >::type X(XSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type Y(YSEXP);
+    Rcpp::traits::input_parameter< const std::string& >::type penalty_x(penalty_xSEXP);
+    Rcpp::traits::input_parameter< const std::string& >::type penalty_y(penalty_ySEXP);
+    Rcpp::traits::input_parameter< double >::type lamx(lamxSEXP);
+    Rcpp::traits::input_parameter< double >::type lamy(lamySEXP);
+    __result = Rcpp::wrap(sparse_nipals(X, Y, penalty_x, penalty_y, lamx, lamy));
+    return __result;
 END_RCPP
 }
 // fscca
-Rcpp::List fscca(arma::mat X, arma::mat Y, const std::string& penalty_x, const std::string& penalty_y, const arma::vec& lam_x, const arma::vec& lam_y, size_t k_folds = 5, size_t n_components = 1, bool center = true, bool scale = false);
+Rcpp::List fscca(arma::mat X, arma::mat Y, const std::string& penalty_x, const std::string& penalty_y, const arma::vec& lam_x, const arma::vec& lam_y, size_t k_folds, size_t n_components, bool center, bool scale);
 RcppExport SEXP fscca_fscca(SEXP XSEXP, SEXP YSEXP, SEXP penalty_xSEXP, SEXP penalty_ySEXP, SEXP lam_xSEXP, SEXP lam_ySEXP, SEXP k_foldsSEXP, SEXP n_componentsSEXP, SEXP centerSEXP, SEXP scaleSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< arma::mat >::type X(XSEXP );
-        Rcpp::traits::input_parameter< arma::mat >::type Y(YSEXP );
-        Rcpp::traits::input_parameter< const std::string& >::type penalty_x(penalty_xSEXP );
-        Rcpp::traits::input_parameter< const std::string& >::type penalty_y(penalty_ySEXP );
-        Rcpp::traits::input_parameter< const arma::vec& >::type lam_x(lam_xSEXP );
-        Rcpp::traits::input_parameter< const arma::vec& >::type lam_y(lam_ySEXP );
-        Rcpp::traits::input_parameter< size_t >::type k_folds(k_foldsSEXP );
-        Rcpp::traits::input_parameter< size_t >::type n_components(n_componentsSEXP );
-        Rcpp::traits::input_parameter< bool >::type center(centerSEXP );
-        Rcpp::traits::input_parameter< bool >::type scale(scaleSEXP );
-        Rcpp::List __result = fscca(X, Y, penalty_x, penalty_y, lam_x, lam_y, k_folds, n_components, center, scale);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< arma::mat >::type X(XSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type Y(YSEXP);
+    Rcpp::traits::input_parameter< const std::string& >::type penalty_x(penalty_xSEXP);
+    Rcpp::traits::input_parameter< const std::string& >::type penalty_y(penalty_ySEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type lam_x(lam_xSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type lam_y(lam_ySEXP);
+    Rcpp::traits::input_parameter< size_t >::type k_folds(k_foldsSEXP);
+    Rcpp::traits::input_parameter< size_t >::type n_components(n_componentsSEXP);
+    Rcpp::traits::input_parameter< bool >::type center(centerSEXP);
+    Rcpp::traits::input_parameter< bool >::type scale(scaleSEXP);
+    __result = Rcpp::wrap(fscca(X, Y, penalty_x, penalty_y, lam_x, lam_y, k_folds, n_components, center, scale));
+    return __result;
 END_RCPP
 }

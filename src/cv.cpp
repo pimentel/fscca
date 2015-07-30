@@ -113,10 +113,10 @@ void cross_validation_alt(const arma::mat& X, const arma::mat& Y,
     for (auto& lam : lamy)
         pen_y.push_back( std::move(PenaltyFactory::make_penalty(penalty_y, lam)) );
 
-    unsigned int opt_x = std::rand() % pen_x.size();
-    /* arma::uword opt_x = std::rand() % pen_x.size(); */
-    unsigned int opt_y = 0;
-    /* arma::uword opt_y = 0; */
+    /* unsigned int opt_x = std::rand() % pen_x.size(); */
+    arma::uword opt_x = std::rand() % pen_x.size();
+    /* unsigned int opt_y = 0; */
+    arma::uword opt_y = 0;
 
     NipalsPenalty* cur_pen_x;
     NipalsPenalty* cur_pen_y;
